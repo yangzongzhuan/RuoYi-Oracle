@@ -97,7 +97,7 @@
 		LEFT JOIN sys_role ro on ur.role_id = ro.role_id
 		where ur.user_id = #{params.userId}
 		<if test="menuName != null and menuName != ''">
-			AND m.menu_name like cooncat(concat('%', #{menuName}), '%'))
+			AND m.menu_name like concat(concat('%', #{menuName}), '%')
 		</if>
 		<if test="visible != null and visible != ''">
 			AND m.visible = #{visible}
