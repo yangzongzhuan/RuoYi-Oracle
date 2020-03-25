@@ -17,13 +17,6 @@
 	
     <dependencies>
 
-	    <!--oracle驱动-->
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc14</artifactId>
-			<version>${oracle.version}</version>
-		</dependency>
-    
         <!-- 通用工具-->
         <dependency>
             <groupId>com.ruoyi</groupId>

@@ -73,6 +73,13 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
         
+        <!--oracle驱动-->
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc14</artifactId>
+			<version>${oracle.version}</version>
+		</dependency>
+        
     </dependencies>
 
     <build>
