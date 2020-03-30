@@ -81,6 +81,7 @@ public class GenTableServiceImpl implements IGenTableService
      * @param genTable 业务信息
      * @return 数据库表集合
      */
+    @Override
     public List<GenTable> selectDbTableList(GenTable genTable)
     {
         return genTableMapper.selectDbTableList(genTable);
@@ -92,6 +93,7 @@ public class GenTableServiceImpl implements IGenTableService
      * @param tableNames 表名称组
      * @return 数据库表集合
      */
+    @Override
     public List<GenTable> selectDbTableListByNames(String[] tableNames)
     {
         return genTableMapper.selectDbTableListByNames(tableNames);
@@ -174,6 +176,7 @@ public class GenTableServiceImpl implements IGenTableService
      * @param tableId 表编号
      * @return 预览数据列表
      */
+    @Override
     public Map<String, String> previewCode(Long tableId)
     {
         Map<String, String> dataMap = new LinkedHashMap<>();
@@ -266,7 +269,7 @@ public class GenTableServiceImpl implements IGenTableService
                 zip.putNextEntry(new ZipEntry(VelocityUtils.getFileName(template, table)));
                 IOUtils.write(sw.toString(), zip, Constants.UTF8);
                 IOUtils.closeQuietly(sw);
-				zip.flush();
+                zip.flush();
                 zip.closeEntry();
             }
             catch (IOException e)
@@ -281,6 +284,7 @@ public class GenTableServiceImpl implements IGenTableService
      * 
      * @param genTable 业务信息
      */
+    @Override
     public void validateEdit(GenTable genTable)
     {
         if (GenConstants.TPL_TREE.equals(genTable.getTplCategory()))
