@@ -73,7 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateDictData" parameterType="SysDictData">
  		update sys_dict_data
  		<set>
- 			<if test="dictSort != null and dictSort != ''">dict_sort = #{dictSort},</if>
+ 			<if test="dictSort != null">dict_sort = #{dictSort},</if>
  			<if test="dictLabel != null and dictLabel != ''">dict_label = #{dictLabel},</if>
  			<if test="dictValue != null and dictValue != ''">dict_value = #{dictValue},</if>
  			<if test="dictType != null and dictType != ''">dict_type = #{dictType},</if>
@@ -98,7 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</selectKey>
  		insert into sys_dict_data(
  		    <if test="dictCode != null and dictCode != 0">dict_code,</if>
- 			<if test="dictSort != null and dictSort != ''">dict_sort,</if>
+ 			<if test="dictSort != null">dict_sort,</if>
  			<if test="dictLabel != null and dictLabel != ''">dict_label,</if>
  			<if test="dictValue != null and dictValue != ''">dict_value,</if>
  			<if test="dictType != null and dictType != ''">dict_type,</if>
@@ -111,7 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			create_time
  		)values(
  		    <if test="dictCode != null and dictCode != 0">#{dictCode},</if>
- 		    <if test="dictSort != null and dictSort != ''">#{dictSort},</if>
+ 		    <if test="dictSort != null">#{dictSort},</if>
  		    <if test="dictLabel != null and dictLabel != ''">#{dictLabel},</if>
  			<if test="dictValue != null and dictValue != ''">#{dictValue},</if>
  			<if test="dictType != null and dictType != ''">#{dictType},</if>
