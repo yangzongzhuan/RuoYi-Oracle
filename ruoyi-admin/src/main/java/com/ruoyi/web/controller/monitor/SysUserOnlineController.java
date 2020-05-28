@@ -1,18 +1,19 @@
 package com.ruoyi.web.controller.monitor;
 
 import java.util.List;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.enums.OnlineStatus;
 import com.ruoyi.framework.shiro.session.OnlineSession;
@@ -55,13 +56,13 @@ public class SysUserOnlineController extends BaseController
         return getDataTable(list);
     }
 
-    @RequiresPermissions("monitor:online:batchForceLogout")
+    @RequiresPermissions(value = { "monitor:online:batchForceLogout", "monitor:online:forceLogout" }, logical = Logical.OR)
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
     @PostMapping("/batchForceLogout")
     @ResponseBody
-    public AjaxResult batchForceLogout(@RequestParam("ids[]") String[] ids)
+    public AjaxResult batchForceLogout(String ids)
     {
-        for (String sessionId : ids)
+        for (String sessionId : Convert.toStrArray(ids))
         {
             SysUserOnline online = userOnlineService.selectOnlineById(sessionId);
             if (online == null)
@@ -82,33 +83,6 @@ public class SysUserOnlineController extends BaseController
             online.setStatus(OnlineStatus.off_line);
             userOnlineService.saveOnline(online);
         }
-        return success();
-    }
-
-    @RequiresPermissions("monitor:online:forceLogout")
-    @Log(title = "在线用户", businessType = BusinessType.FORCE)
-    @PostMapping("/forceLogout")
-    @ResponseBody
-    public AjaxResult forceLogout(String sessionId)
-    {
-        SysUserOnline online = userOnlineService.selectOnlineById(sessionId);
-        if (sessionId.equals(ShiroUtils.getSessionId()))
-        {
-            return error("当前登陆用户无法强退");
-        }
-        if (online == null)
-        {
-            return error("用户已下线");
-        }
-        OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
-        if (onlineSession == null)
-        {
-            return error("用户已下线");
-        }
-        onlineSession.setStatus(OnlineStatus.off_line);
-        onlineSessionDAO.update(onlineSession);
-        online.setStatus(OnlineStatus.off_line);
-        userOnlineService.saveOnline(online);
         return success();
     }
 }
