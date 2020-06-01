@@ -10,7 +10,7 @@ create sequence seq_sys_dept
 
 create table sys_dept (
   dept_id           number(20)      not null,
-  parent_id         number	(20)    default 0,
+  parent_id         number(20)      default 0,
   ancestors         varchar2(50)    default '',
   dept_name         varchar2(30)    default '',
   order_num         number(4)       default 0,
