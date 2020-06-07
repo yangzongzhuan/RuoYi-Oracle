@@ -153,7 +153,7 @@ public class VelocityUtils
         }
         else if (template.contains("mapper.xml.vm"))
         {
-            fileName = StringUtils.format("{}/{}Mapper.xml", mybatisPath, className);
+            fileName = StringUtils.format("{}/{}mapper.xml", mybatisPath, className);
         }
         else if (template.contains("list.html.vm"))
         {
