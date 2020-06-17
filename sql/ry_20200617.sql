@@ -958,43 +958,47 @@ create sequence seq_gen_table
  cache 20;
 
 create table gen_table (
-  table_id          number(20)       not null,
-  table_name        varchar2(200)    default '',
-  table_comment     varchar2(500)    default '',
-  class_name        varchar2(100)    default '',
-  tpl_category      varchar2(200)    default 'crud',
-  package_name      varchar2(100),
-  module_name       varchar2(30),
-  business_name     varchar2(30),
-  function_name     varchar2(50),
-  function_author   varchar2(50),
-  options           varchar2(1000),
-  create_by         varchar2(64)     default '',
-  create_time       date,
-  update_by         varchar2(64)     default '',
-  update_time       date,
-  remark            varchar2(500)    default null
+  table_id           number(20)       not null,
+  table_name         varchar2(200)    default '',
+  table_comment      varchar2(500)    default '',
+   sub_table_name    varchar(64)      default null,
+  sub_table_fk_name  varchar(64)      default null,
+  class_name         varchar2(100)    default '',
+  tpl_category       varchar2(200)    default 'crud',
+  package_name       varchar2(100),
+  module_name        varchar2(30),
+  business_name      varchar2(30),
+  function_name      varchar2(50),
+  function_author    varchar2(50),
+  options            varchar2(1000),
+  create_by          varchar2(64)     default '',
+  create_time        date,
+  update_by          varchar2(64)     default '',
+  update_time        date,
+  remark             varchar2(500)    default null
 );
 
 alter table gen_table add constraint pk_gen_table primary key (table_id);
 
-comment on table  gen_table                  is '代码生成业务表';
-comment on column gen_table.table_id         is '编号';
-comment on column gen_table.table_name       is '表名称';
-comment on column gen_table.table_comment    is '表描述';
-comment on column gen_table.class_name       is '实体类名称';
-comment on column gen_table.tpl_category     is '使用的模板（crud单表操作 tree树表操作）';
-comment on column gen_table.package_name     is '生成包路径';
-comment on column gen_table.module_name      is '生成模块名';
-comment on column gen_table.business_name    is '生成业务名';
-comment on column gen_table.function_name    is '生成功能名';
-comment on column gen_table.function_author  is '生成功能作者';
-comment on column gen_table.options          is '其它生成选项';
-comment on column gen_table.create_by        is '创建者';
-comment on column gen_table.create_time      is '创建时间';
-comment on column gen_table.update_by        is '更新者';
-comment on column gen_table.update_time      is '更新时间';
-comment on column gen_table.remark           is '备注';
+comment on table  gen_table                          is '代码生成业务表';
+comment on column gen_table.table_id                 is '编号';
+comment on column gen_table.table_name               is '表名称';
+comment on column gen_table.table_comment            is '表描述';
+comment on column gen_table_column.sub_table_name    is '关联子表的表名';
+comment on column gen_table_column.sub_table_fk_name is '子表关联的外键名';
+comment on column gen_table.class_name               is '实体类名称';
+comment on column gen_table.tpl_category             is '使用的模板（crud单表操作 tree树表操作）';
+comment on column gen_table.package_name             is '生成包路径';
+comment on column gen_table.module_name              is '生成模块名';
+comment on column gen_table.business_name            is '生成业务名';
+comment on column gen_table.function_name            is '生成功能名';
+comment on column gen_table.function_author          is '生成功能作者';
+comment on column gen_table.options                  is '其它生成选项';
+comment on column gen_table.create_by                is '创建者';
+comment on column gen_table.create_time              is '创建时间';
+comment on column gen_table.update_by                is '更新者';
+comment on column gen_table.update_time              is '更新时间';
+comment on column gen_table.remark                   is '备注';
 
 
 -- ----------------------------
@@ -1007,55 +1011,55 @@ create sequence seq_gen_table_column
  nominvalue
  cache 20;
 create table gen_table_column (
-  column_id         number(20)      not null,
-  table_id          varchar2(64),
-  column_name       varchar2(200),
-  column_comment    varchar2(500),
-  column_type       varchar2(100),
-  java_type         varchar2(500),
-  java_field        varchar2(200),
-  is_pk             char(1),
-  is_increment      char(1),
-  is_required       char(1),
-  is_insert         char(1),
-  is_edit           char(1),
-  is_list           char(1),
-  is_query          char(1),
-  query_type        varchar(200)    default 'EQ',
-  html_type         varchar(200),
-  dict_type         varchar(200)    default '',
-  sort              number(4),
-  create_by         varchar(64)     default '',
-  create_time       date ,
-  update_by         varchar(64)     default '',
-  update_time       date
+  column_id          number(20)      not null,
+  table_id           varchar2(64),
+  column_name        varchar2(200),
+  column_comment     varchar2(500),
+  column_type        varchar2(100),
+  java_type          varchar2(500),
+  java_field         varchar2(200),
+  is_pk              char(1),
+  is_increment       char(1),
+  is_required        char(1),
+  is_insert          char(1),
+  is_edit            char(1),
+  is_list            char(1),
+  is_query           char(1),
+  query_type         varchar(200)    default 'EQ',
+  html_type          varchar(200),
+  dict_type          varchar(200)    default '',
+  sort               number(4),
+  create_by          varchar(64)     default '',
+  create_time        date ,
+  update_by          varchar(64)     default '',
+  update_time        date
 );
 
 alter table gen_table_column add constraint pk_gen_table_column primary key (column_id);
 
-comment on table  gen_table_column                is '代码生成业务表字段';
-comment on column gen_table_column.column_id      is '编号';
-comment on column gen_table_column.table_id       is '归属表编号';
-comment on column gen_table_column.column_name    is '列名称';
-comment on column gen_table_column.column_comment is '列描述';
-comment on column gen_table_column.column_type    is '列类型';
-comment on column gen_table_column.java_type      is 'JAVA类型';
-comment on column gen_table_column.java_field     is 'JAVA字段名';
-comment on column gen_table_column.is_pk          is '是否主键（1是）';
-comment on column gen_table_column.is_increment   is '是否自增（1是）';
-comment on column gen_table_column.is_required    is '是否必填（1是）';
-comment on column gen_table_column.is_insert      is '是否为插入字段（1是）';
-comment on column gen_table_column.is_edit        is '是否编辑字段（1是）';
-comment on column gen_table_column.is_list        is '是否列表字段（1是）';
-comment on column gen_table_column.is_query       is '是否查询字段（1是）';
-comment on column gen_table_column.query_type     is '查询方式（等于、不等于、大于、小于、范围）';
-comment on column gen_table_column.html_type      is '显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件）';
-comment on column gen_table_column.dict_type      is '字典类型';
-comment on column gen_table_column.sort           is '排序';
-comment on column gen_table_column.create_by      is '创建者';
-comment on column gen_table_column.create_time    is '创建时间';
-comment on column gen_table_column.update_by      is '更新者';
-comment on column gen_table_column.update_time    is '更新时间';
+comment on table  gen_table_column                   is '代码生成业务表字段';
+comment on column gen_table_column.column_id         is '编号';
+comment on column gen_table_column.table_id          is '归属表编号';
+comment on column gen_table_column.column_name       is '列名称';
+comment on column gen_table_column.column_comment    is '列描述';
+comment on column gen_table_column.column_type       is '列类型';
+comment on column gen_table_column.java_type         is 'JAVA类型';
+comment on column gen_table_column.java_field        is 'JAVA字段名';
+comment on column gen_table_column.is_pk             is '是否主键（1是）';
+comment on column gen_table_column.is_increment      is '是否自增（1是）';
+comment on column gen_table_column.is_required       is '是否必填（1是）';
+comment on column gen_table_column.is_insert         is '是否为插入字段（1是）';
+comment on column gen_table_column.is_edit           is '是否编辑字段（1是）';
+comment on column gen_table_column.is_list           is '是否列表字段（1是）';
+comment on column gen_table_column.is_query          is '是否查询字段（1是）';
+comment on column gen_table_column.query_type        is '查询方式（等于、不等于、大于、小于、范围）';
+comment on column gen_table_column.html_type         is '显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件）';
+comment on column gen_table_column.dict_type         is '字典类型';
+comment on column gen_table_column.sort              is '排序';
+comment on column gen_table_column.create_by         is '创建者';
+comment on column gen_table_column.create_time       is '创建时间';
+comment on column gen_table_column.update_by         is '更新者';
+comment on column gen_table_column.update_time       is '更新时间';
 
 
 -- ----------------------------
