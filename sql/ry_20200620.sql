@@ -987,7 +987,7 @@ comment on column gen_table.table_comment            is '表描述';
 comment on column gen_table_column.sub_table_name    is '关联子表的表名';
 comment on column gen_table_column.sub_table_fk_name is '子表关联的外键名';
 comment on column gen_table.class_name               is '实体类名称';
-comment on column gen_table.tpl_category             is '使用的模板（crud单表操作 tree树表操作）';
+comment on column gen_table.tpl_category             is '使用的模板（crud单表操作 tree树表操作 sub主子表操作）';
 comment on column gen_table.package_name             is '生成包路径';
 comment on column gen_table.module_name              is '生成模块名';
 comment on column gen_table.business_name            is '生成业务名';
