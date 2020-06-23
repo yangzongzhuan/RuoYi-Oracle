@@ -50,6 +50,7 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.reflect.ReflectUtils;
+import com.ruoyi.common.utils.spring.SpringUtils;
 
 /**
  * Excel相关处理
@@ -276,7 +277,11 @@ public class ExcelUtil<T>
                         }
                         else if (StringUtils.isNotEmpty(attr.readConverterExp()))
                         {
-                            val = reverseByExp(String.valueOf(val), attr.readConverterExp(), attr.separator());
+                            val = reverseByExp(Convert.toStr(val), attr.readConverterExp(), attr.separator());
+                        }
+                        else if (StringUtils.isNotEmpty(attr.dictType()))
+                        {
+                            val = reverseDictByExp(Convert.toStr(val), attr.dictType(), attr.separator());
                         }
                         ReflectUtils.invokeSetter(entity, propertyName, val);
                     }
@@ -536,13 +541,18 @@ public class ExcelUtil<T>
                 String dateFormat = attr.dateFormat();
                 String readConverterExp = attr.readConverterExp();
                 String separator = attr.separator();
+                String dictType = attr.dictType();
                 if (StringUtils.isNotEmpty(dateFormat) && StringUtils.isNotNull(value))
                 {
                     cell.setCellValue(DateUtils.parseDateToStr(dateFormat, (Date) value));
                 }
                 else if (StringUtils.isNotEmpty(readConverterExp) && StringUtils.isNotNull(value))
                 {
-                    cell.setCellValue(convertByExp(String.valueOf(value), readConverterExp, separator));
+                    cell.setCellValue(convertByExp(Convert.toStr(value), readConverterExp, separator));
+                }
+                else if (StringUtils.isNotEmpty(dictType))
+                {
+                    cell.setCellValue(convertDictByExp(Convert.toStr(value), dictType, separator));
                 }
                 else
                 {
@@ -672,37 +682,62 @@ public class ExcelUtil<T>
     public static String reverseByExp(String propertyValue, String converterExp, String separator) throws Exception
     {
         StringBuilder propertyString = new StringBuilder();
-        try
+        String[] convertSource = converterExp.split(",");
+        for (String item : convertSource)
         {
-            String[] convertSource = converterExp.split(",");
-            for (String item : convertSource)
+            String[] itemArray = item.split("=");
+            if (StringUtils.containsAny(separator, propertyValue))
             {
-                String[] itemArray = item.split("=");
-                if (StringUtils.containsAny(separator, propertyValue))
+                for (String value : propertyValue.split(separator))
                 {
-                    for (String value : propertyValue.split(separator))
+                    if (itemArray[1].equals(value))
                     {
-                        if (itemArray[1].equals(value))
-                        {
-                            propertyString.append(itemArray[0] + separator);
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    if (itemArray[1].equals(propertyValue))
-                    {
-                        return itemArray[0];
+                        propertyString.append(itemArray[0] + separator);
+                        break;
                     }
                 }
             }
-        }
-        catch (Exception e)
-        {
-            throw e;
+            else
+            {
+                if (itemArray[1].equals(propertyValue))
+                {
+                    return itemArray[0];
+                }
+            }
         }
         return StringUtils.stripEnd(propertyString.toString(), separator);
+    }
+
+    /**
+     * 解析字典值
+     * 
+     * @param dictValue 字典值
+     * @param dictType 字典类型
+     * @param separator 分隔符
+     * @return 字典标签
+     */
+    public static String convertDictByExp(String dictValue, String dictType, String separator) throws Exception
+    {
+        Object bean = SpringUtils.getBean("dictUtils");
+        String methodName = "getDictLabel";
+        Method method = bean.getClass().getDeclaredMethod(methodName, String.class, String.class, String.class);
+        return Convert.toStr(method.invoke(bean, dictType, dictValue, separator));
+    }
+
+    /**
+     * 反向解析值字典值
+     * 
+     * @param dictLabel 字典标签
+     * @param dictType 字典类型
+     * @param separator 分隔符
+     * @return 字典值
+     */
+    public static String reverseDictByExp(String dictLabel, String dictType, String separator) throws Exception
+    {
+        Object bean = SpringUtils.getBean("dictUtils");
+        String methodName = "getDictValue";
+        Method method = bean.getClass().getDeclaredMethod(methodName, String.class, String.class, String.class);
+        return Convert.toStr(method.invoke(bean, dictType, dictLabel, separator));
     }
 
     /**
