@@ -961,7 +961,7 @@ create table gen_table (
   table_id           number(20)       not null,
   table_name         varchar2(200)    default '',
   table_comment      varchar2(500)    default '',
-   sub_table_name    varchar(64)      default null,
+  sub_table_name     varchar(64)      default null,
   sub_table_fk_name  varchar(64)      default null,
   class_name         varchar2(100)    default '',
   tpl_category       varchar2(200)    default 'crud',
@@ -970,6 +970,8 @@ create table gen_table (
   business_name      varchar2(30),
   function_name      varchar2(50),
   function_author    varchar2(50),
+  gen_type           char(1)          default '0',
+  gen_path           varchar2(200)    default '/',
   options            varchar2(1000),
   create_by          varchar2(64)     default '',
   create_time        date,
@@ -984,8 +986,8 @@ comment on table  gen_table                          is '代码生成业务表';
 comment on column gen_table.table_id                 is '编号';
 comment on column gen_table.table_name               is '表名称';
 comment on column gen_table.table_comment            is '表描述';
-comment on column gen_table_column.sub_table_name    is '关联子表的表名';
-comment on column gen_table_column.sub_table_fk_name is '子表关联的外键名';
+comment on column gen_table.sub_table_name           is '关联子表的表名';
+comment on column gen_table.sub_table_fk_name        is '子表关联的外键名';
 comment on column gen_table.class_name               is '实体类名称';
 comment on column gen_table.tpl_category             is '使用的模板（crud单表操作 tree树表操作 sub主子表操作）';
 comment on column gen_table.package_name             is '生成包路径';
@@ -993,6 +995,8 @@ comment on column gen_table.module_name              is '生成模块名';
 comment on column gen_table.business_name            is '生成业务名';
 comment on column gen_table.function_name            is '生成功能名';
 comment on column gen_table.function_author          is '生成功能作者';
+comment on column gen_table.gen_type                 is '生成代码方式（0zip压缩包 1自定义路径）';
+comment on column gen_table.gen_path                 is '生成路径（不填默认项目路径）';
 comment on column gen_table.options                  is '其它生成选项';
 comment on column gen_table.create_by                is '创建者';
 comment on column gen_table.create_time              is '创建时间';
