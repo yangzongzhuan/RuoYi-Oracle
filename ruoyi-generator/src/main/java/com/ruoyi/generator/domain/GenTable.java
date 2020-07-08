@@ -86,6 +86,12 @@ public class GenTable extends BaseEntity
     /** 菜单id **/
     private Long menuId;
 
+    /** 上级菜单ID字段 */
+    private String parentMenuId;
+
+    /** 上级菜单名称字段 */
+    private String parentMenuName;
+
     public Long getTableId()
     {
         return tableId;
@@ -276,6 +282,36 @@ public class GenTable extends BaseEntity
         this.treeName = treeName;
     }
 
+    public Long getMenuId()
+    {
+        return menuId;
+    }
+
+    public void setMenuId(Long menuId)
+    {
+        this.menuId = menuId;
+    }
+
+    public String getParentMenuId()
+    {
+        return parentMenuId;
+    }
+
+    public void setParentMenuId(String parentMenuId)
+    {
+        this.parentMenuId = parentMenuId;
+    }
+
+    public String getParentMenuName()
+    {
+        return parentMenuName;
+    }
+
+    public void setParentMenuName(String parentMenuName)
+    {
+        this.parentMenuName = parentMenuName;
+    }
+
     public boolean isSub()
     {
         return isSub(this.tplCategory);
@@ -304,16 +340,6 @@ public class GenTable extends BaseEntity
     public static boolean isCrud(String tplCategory)
     {
         return tplCategory != null && StringUtils.equals(GenConstants.TPL_CRUD, tplCategory);
-    }
-
-    public Long getMenuId()
-    {
-        return menuId;
-    }
-
-    public void setMenuId(Long menuId)
-    {
-        this.menuId = menuId;
     }
 
     public boolean isSuperColumn(String javaField)

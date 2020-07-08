@@ -1,6 +1,6 @@
 -- 菜单 SQL
 insert into sys_menu (menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values(${table.menuId}, '${functionName}', '3', '1', '/${moduleName}/${businessName}', 'C', '0', '${permissionPrefix}:view', '#', 'admin', sysdate, 'ry', sysdate, '${functionName}菜单');
+values(${table.menuId}, '${functionName}', '${parentMenuId}', '1', '/${moduleName}/${businessName}', 'C', '0', '${permissionPrefix}:view', '#', 'admin', sysdate, 'ry', sysdate, '${functionName}菜单');
 
 -- 按钮 SQL
 insert into sys_menu (menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)

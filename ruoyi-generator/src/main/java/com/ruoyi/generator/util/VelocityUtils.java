@@ -22,6 +22,9 @@ public class VelocityUtils
 
     /** html空间路径 */
     private static final String TEMPLATES_PATH = "main/resources/templates";
+    
+    /** 默认上级菜单，系统工具 */
+    private static final String DEFAULT_PARENT_MENU_ID = "3";
 
     /**
      * 设置模板变量信息
@@ -53,6 +56,7 @@ public class VelocityUtils
         velocityContext.put("permissionPrefix", getPermissionPrefix(moduleName, businessName));
         velocityContext.put("columns", genTable.getColumns());
         velocityContext.put("table", genTable);
+        setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory))
         {
             setTreeVelocityContext(velocityContext, genTable);
@@ -62,6 +66,14 @@ public class VelocityUtils
             setSubVelocityContext(velocityContext, genTable);
         }
         return velocityContext;
+    }
+
+    public static void setMenuVelocityContext(VelocityContext context, GenTable genTable)
+    {
+        String options = genTable.getOptions();
+        JSONObject paramsObj = JSONObject.parseObject(options);
+        String parentMenuId = getParentMenuId(paramsObj);
+        context.put("parentMenuId", parentMenuId);
     }
 
     public static void setTreeVelocityContext(VelocityContext context, GenTable genTable)
@@ -162,8 +174,7 @@ public class VelocityUtils
         {
             fileName = StringUtils.format("{}/domain/{}.java", javaPath, className);
         }
-        if (template.contains("sub-domain.java.vm")
-                && StringUtils.equals(GenConstants.TPL_SUB, genTable.getTplCategory()))
+        if (template.contains("sub-domain.java.vm") && StringUtils.equals(GenConstants.TPL_SUB, genTable.getTplCategory()))
         {
             fileName = StringUtils.format("{}/domain/{}.java", javaPath, genTable.getSubTable().getClassName());
         }
@@ -285,6 +296,21 @@ public class VelocityUtils
     }
 
     /**
+     * 获取上级菜单ID字段
+     * 
+     * @param options 生成其他选项
+     * @return 上级菜单ID字段
+     */
+    public static String getParentMenuId(JSONObject paramsObj)
+    {
+        if (paramsObj.containsKey(GenConstants.PARENT_MENU_ID))
+        {
+            return paramsObj.getString(GenConstants.PARENT_MENU_ID);
+        }
+        return DEFAULT_PARENT_MENU_ID;
+    }
+
+    /**
      * 获取树编码
      * 
      * @param options 生成其他选项
@@ -296,7 +322,7 @@ public class VelocityUtils
         {
             return StringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_CODE));
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -311,7 +337,7 @@ public class VelocityUtils
         {
             return StringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_PARENT_CODE));
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -326,7 +352,7 @@ public class VelocityUtils
         {
             return StringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_NAME));
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**
