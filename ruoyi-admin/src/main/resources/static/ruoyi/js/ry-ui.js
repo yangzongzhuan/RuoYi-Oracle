@@ -38,6 +38,7 @@ var table = {
             	var defaults = {
             		id: "bootstrap-table",
             		type: 0, // 0 代表bootstrapTable 1代表bootstrapTreeTable
+            		method: 'post',
         		    height: undefined,
         		    sidePagination: "server",
         		    sortName: "",
@@ -66,8 +67,7 @@ var table = {
                     rememberSelected: false,
         		    fixedColumns: false,
         		    fixedNumber: 0,
-        		    rightFixedColumns: false,
-        		    rightFixedNumber: 0,
+        		    fixedRightNumber: 0,
         		    queryParams: $.table.queryParams,
         		    rowStyle: {},
         		};
@@ -79,7 +79,7 @@ var table = {
                 	id: options.id,
                     url: options.url,                                   // 请求后台的URL（*）
                     contentType: "application/x-www-form-urlencoded",   // 编码类型
-                    method: 'post',                                     // 请求方式（*）
+                    method: options.method,                             // 请求方式（*）
                     cache: false,                                       // 是否使用缓存
                     height: options.height,                             // 表格的高度
                     striped: options.striped,                           // 是否显示行间隔色
@@ -124,8 +124,7 @@ var table = {
                     rememberSelected: options.rememberSelected,         // 启用翻页记住前面的选择
                     fixedColumns: options.fixedColumns,                 // 是否启用冻结列（左侧）
                     fixedNumber: options.fixedNumber,                   // 列冻结的个数（左侧）
-                    rightFixedColumns: options.rightFixedColumns,       // 是否启用冻结列（右侧）
-                    rightFixedNumber: options.rightFixedNumber,         // 列冻结的个数（右侧）
+                    fixedRightNumber: options.fixedRightNumber,         // 列冻结的个数（右侧）
                     onReorderRow: options.onReorderRow,                 // 当拖拽结束后处理函数
                     queryParams: options.queryParams,                   // 传递参数（*）
                     rowStyle: options.rowStyle,                         // 通过自定义函数设置行样式
