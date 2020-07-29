@@ -233,6 +233,24 @@ public class DemoTableController extends BaseController
     }
 
     /**
+     * 表格自动刷新
+     */
+    @GetMapping("/refresh")
+    public String refresh()
+    {
+        return prefix + "/refresh";
+    }
+
+    /**
+     * 表格打印配置
+     */
+    @GetMapping("/print")
+    public String print()
+    {
+        return prefix + "/print";
+    }
+
+    /**
      * 表格其他操作
      */
     @GetMapping("/other")
