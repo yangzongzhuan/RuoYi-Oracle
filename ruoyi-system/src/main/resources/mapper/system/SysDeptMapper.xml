@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="selectChildrenDeptById" parameterType="Long" resultMap="SysDeptResult">
-		select * from sys_dept where FIND_IN_SET (#{deptId},ancestors) <![CDATA[ <> ]]> 0
+		select * from sys_dept where FIND_IN_SET (#{deptId}, ancestors) <![CDATA[ <> ]]> 0
 	</select>
 	
 	<select id="selectNormalChildrenDeptById" parameterType="Long" resultType="int">
