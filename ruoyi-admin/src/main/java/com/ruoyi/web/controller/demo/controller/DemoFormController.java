@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.CxSelect;
+import com.ruoyi.common.json.JSONObject;
+import com.ruoyi.common.json.JSONObject.JSONArray;
 import com.ruoyi.common.utils.StringUtils;
 
 /**
@@ -87,6 +87,15 @@ public class DemoFormController
     public String sortable()
     {
         return prefix + "/sortable";
+    }
+
+    /**
+     * 单据打印
+     */
+    @GetMapping("/invoice")
+    public String invoice()
+    {
+        return prefix + "/invoice";
     }
 
     /**
