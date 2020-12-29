@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
-import com.ruoyi.common.config.Global;
+import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.exception.file.FileNameLengthLimitExceededException;
 import com.ruoyi.common.exception.file.FileSizeLimitExceededException;
 import com.ruoyi.common.exception.file.InvalidExtensionException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.utils.security.Md5Utils;
+import com.ruoyi.common.utils.uuid.IdUtils;
 
 /**
  * 文件上传工具类
@@ -33,9 +33,7 @@ public class FileUploadUtils
     /**
      * 默认上传的地址
      */
-    private static String defaultBaseDir = Global.getProfile();
-
-    private static int counter = 0;
+    private static String defaultBaseDir = RuoYiConfig.getProfile();
 
     public static void setDefaultBaseDir(String defaultBaseDir)
     {
@@ -125,7 +123,7 @@ public class FileUploadUtils
     {
         String fileName = file.getOriginalFilename();
         String extension = getExtension(file);
-        fileName = DateUtils.datePath() + "/" + encodingFilename(fileName) + "." + extension;
+        fileName = DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + extension;
         return fileName;
     }
 
@@ -133,33 +131,22 @@ public class FileUploadUtils
     {
         File desc = new File(uploadDir + File.separator + fileName);
 
-        if (!desc.getParentFile().exists())
-        {
-            desc.getParentFile().mkdirs();
-        }
         if (!desc.exists())
         {
-            desc.createNewFile();
+            if (!desc.getParentFile().exists())
+            {
+                desc.getParentFile().mkdirs();
+            }
         }
         return desc;
     }
 
     private static final String getPathFileName(String uploadDir, String fileName) throws IOException
     {
-        int dirLastIndex = Global.getProfile().length() + 1;
+        int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(uploadDir, dirLastIndex);
         String pathFileName = Constants.RESOURCE_PREFIX + "/" + currentDir + "/" + fileName;
         return pathFileName;
-    }
-
-    /**
-     * 编码文件名
-     */
-    private static final String encodingFilename(String fileName)
-    {
-        fileName = fileName.replace("_", " ");
-        fileName = Md5Utils.hash(fileName + System.nanoTime() + counter++);
-        return fileName;
     }
 
     /**
@@ -196,6 +183,11 @@ public class FileUploadUtils
             else if (allowedExtension == MimeTypeUtils.MEDIA_EXTENSION)
             {
                 throw new InvalidExtensionException.InvalidMediaExtensionException(allowedExtension, extension,
+                        fileName);
+            }
+            else if (allowedExtension == MimeTypeUtils.VIDEO_EXTENSION)
+            {
+                throw new InvalidExtensionException.InvalidVideoExtensionException(allowedExtension, extension,
                         fileName);
             }
             else

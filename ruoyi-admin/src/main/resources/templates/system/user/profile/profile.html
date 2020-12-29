@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
 	<th:block th:include="include :: header('用户个人信息')" />
+    <style type="text/css">.user-info-head{position:relative;display:inline-block;}.user-info-head:hover:after{content:'\f030';position:absolute;left:0;right:0;top:0;bottom:0;color:#eee;background:rgba(0,0,0,0.5);font-family:FontAwesome;font-size:24px;font-style:normal;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;cursor:pointer;line-height:110px;border-radius:50%;}</style>
 </head>
 
 <body class="gray-bg" style="font: 14px Helvetica Neue, Helvetica, PingFang SC, 微软雅黑, Tahoma, Arial, sans-serif !important;">
@@ -15,7 +16,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="text-center">
-                        <p><img class="img-circle img-lg" th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}"></p>
+                        <p class="user-info-head" onclick="avatar()"><img class="img-circle img-lg" th:src="(${#strings.isEmpty(user.avatar)}) ? @{/img/profile.jpg} : @{${user.avatar}}" th:onerror="'this.src=\'' + @{'/img/profile.jpg'} + '\''"></p>
                         <p><a href="javascript:avatar()">修改头像</a></p>
                     </div>
                     <ul class="list-group list-group-striped">
@@ -76,7 +77,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">邮箱：</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="email" th:field="*{email}" placeholder="请输入邮箱">
+                                            <input type="text" maxlength="50" class="form-control" name="email" th:field="*{email}" placeholder="请输入邮箱">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -114,6 +115,16 @@
                                         <label class="col-sm-2 control-label">新密码：</label>
                                         <div class="col-sm-10">
                                             <input type="password" class="form-control" name="newPassword" id="newPassword" placeholder="请输入新密码">
+                                            <th:block th:with="chrtype=${@config.getKey('sys.account.chrtype')}"> 
+						                        <th:block th:if="${chrtype != '0'}">
+						                            <span class="help-block m-b-none">
+								                        <th:block th:if="${chrtype == '1'}"><i class="fa fa-info-circle" style="color: red;"></i>  密码只能为0-9数字 </th:block>
+								                        <th:block th:if="${chrtype == '2'}"><i class="fa fa-info-circle" style="color: red;"></i>  密码只能为a-z和A-Z字母</th:block>
+								                        <th:block th:if="${chrtype == '3'}"><i class="fa fa-info-circle" style="color: red;"></i>  密码必须包含（字母，数字）</th:block>
+								                        <th:block th:if="${chrtype == '4'}"><i class="fa fa-info-circle" style="color: red;"></i>  密码必须包含（字母，数字，特殊字符!@#$%^&*()-=_+）</th:block>
+						                            </span>
+                                                </th:block>
+						                    </th:block>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -143,9 +154,28 @@
 	    /*用户管理-头像*/
 	    function avatar() {
 	        var url = ctx + 'system/user/profile/avatar';
-	        $.modal.open("修改头像", url);
+	        top.layer.open({
+        		type: 2,
+        		area: [$(window).width() + 'px', $(window).height() + 'px'],
+        		fix: false,
+        		//不固定
+        		maxmin: true,
+        		shade: 0.3,
+        		title: "修改头像",
+        		content: url,
+        		btn: ['确定', '关闭'],
+        	    // 弹层外区域关闭
+        		shadeClose: true,
+        		yes: function(index, layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandler(index, layero);
+                },
+        	    cancel: function(index) {
+        	        return true;
+        	    }
+        	});
 	    }
-	    
+
 	    /*用户信息-修改*/
 	    $("#form-user-edit").validate({
 			onkeyup: false,
@@ -250,7 +280,7 @@
 	            },
 	            newPassword: {
 	                required: "请输入新密码",
-	                minlength: "密码不能小于6个字符",
+	                minlength: "密码不能小于5个字符",
 	                maxlength: "密码不能大于20个字符"
 	            },
 	            confirmPassword: {
@@ -263,7 +293,9 @@
 		});
 		
 		function submitChangPassword () {
-	        if ($.validate.form("form-user-resetPwd")) {
+			var chrtype = [[${#strings.defaultString(@config.getKey('sys.account.chrtype'), 0)}]];
+			var password = $("#newPassword").val();
+	        if ($.validate.form("form-user-resetPwd") && checkpwd(chrtype, password)) {
 	        	$.operate.saveModal(ctx + "system/user/profile/resetPwd", $('#form-user-resetPwd').serialize());
 	        }
 	    }

@@ -37,6 +37,7 @@
 		</div>
 	</div>
 	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: bootstrap-table-export-js" />
 	<script th:inline="javascript">
 		var forceFlag = [[${@permission.hasPermi('monitor:online:forceLogout')}]];
 		var prefix = ctx + "monitor/online";
@@ -61,7 +62,10 @@
                 },
 		        {
 		            field: 'sessionId',
-		            title: '会话编号'
+		            title: '会话编号',
+		            formatter: function(value, row, index) {
+                    	return $.table.tooltip(value);
+                    }
 		        },
 		        {
 		            field: 'loginName',

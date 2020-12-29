@@ -1,6 +1,7 @@
 package com.ruoyi.generator.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.CxSelect;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.security.PermissionUtils;
 import com.ruoyi.generator.domain.GenTable;
 import com.ruoyi.generator.domain.GenTableColumn;
@@ -126,7 +130,24 @@ public class GenController extends BaseController
     public String edit(@PathVariable("tableId") Long tableId, ModelMap mmap)
     {
         GenTable table = genTableService.selectGenTableById(tableId);
+        List<GenTable> genTables = genTableService.selectGenTableAll();
+        List<CxSelect> cxSelect = new ArrayList<CxSelect>();
+        for (GenTable genTable : genTables)
+        {
+            if (!StringUtils.equals(table.getTableName(), genTable.getTableName()))
+            {
+                CxSelect cxTable = new CxSelect(genTable.getTableName(), genTable.getTableName() + '：' + genTable.getTableComment());
+                List<CxSelect> cxColumns = new ArrayList<CxSelect>();
+                for (GenTableColumn tableColumn : genTable.getColumns())
+                {
+                    cxColumns.add(new CxSelect(tableColumn.getColumnName(), tableColumn.getColumnName() + '：' + tableColumn.getColumnComment()));
+                }
+                cxTable.setS(cxColumns);
+                cxSelect.add(cxTable);
+            }
+        }
         mmap.put("table", table);
+        mmap.put("data", JSON.toJSON(cxSelect));
         return prefix + "/edit";
     }
 
@@ -167,15 +188,41 @@ public class GenController extends BaseController
     }
 
     /**
-     * 生成代码
+     * 生成代码（下载方式）
+     */
+    @RequiresPermissions("tool:gen:code")
+    @Log(title = "代码生成", businessType = BusinessType.GENCODE)
+    @GetMapping("/download/{tableName}")
+    public void download(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException
+    {
+        byte[] data = genTableService.downloadCode(tableName);
+        genCode(response, data);
+    }
+
+    /**
+     * 生成代码（自定义路径）
      */
     @RequiresPermissions("tool:gen:code")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @GetMapping("/genCode/{tableName}")
-    public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException
+    @ResponseBody
+    public AjaxResult genCode(@PathVariable("tableName") String tableName)
     {
-        byte[] data = genTableService.generatorCode(tableName);
-        genCode(response, data);
+        genTableService.generatorCode(tableName);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 同步数据库
+     */
+    @RequiresPermissions("tool:gen:edit")
+    @Log(title = "代码生成", businessType = BusinessType.UPDATE)
+    @GetMapping("/synchDb/{tableName}")
+    @ResponseBody
+    public AjaxResult synchDb(@PathVariable("tableName") String tableName)
+    {
+        genTableService.synchDb(tableName);
+        return AjaxResult.success();
     }
 
     /**
@@ -188,7 +235,7 @@ public class GenController extends BaseController
     public void batchGenCode(HttpServletResponse response, String tables) throws IOException
     {
         String[] tableNames = Convert.toStrArray(tables);
-        byte[] data = genTableService.generatorCode(tableNames);
+        byte[] data = genTableService.downloadCode(tableNames);
         genCode(response, data);
     }
 

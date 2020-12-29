@@ -330,7 +330,7 @@
 label.error {
 	position: absolute;
 	right: 18px;
-	top: 10px;
+	top: 6px;
 	color: #ef392b;
 	font-size: 12px;
 	z-index:99;
@@ -341,12 +341,16 @@ label.error {
 	right: 42px
 }
 
+.input-group input.error + label.error + .input-group-addon>i {
+	color: #ed5565;
+}
+
 .input-group.date label.error {
 	z-index:99;
 	right: 3px
 }
 
-.Validform_error,input.error,select.error {
+.Validform_error,input.error,textarea.error,select.error {
 	background-color: #fbe2e2;
 	border-color: #c66161;
 	color: #c00
@@ -437,6 +441,14 @@ label.error {
 
 .iradio-blue.checked.disabled {
 	background-position: -180px 0
+}
+
+/* ztree */
+div.ztree-border {
+    margin-top: 10px;
+    border: 1px solid #e5e6e7;
+    background: #FFFFFF none;
+    border-radius:4px;
 }
 
 /* 切换开关 */
@@ -590,7 +602,7 @@ label.error {
 	list-style: none;
 }
 
-.time-input {
+.select-time .time-input {
 	display: block;
 	width: 100%;
 	padding-left: 10px;
@@ -644,10 +656,10 @@ label {
 	margin: 5px 15px 5px 0px;
 }
 
-.select-list li p, .select-list li label:not(.radio-box):not(:select-time){
+.select-list li p, .select-list li label:not(.radio-box){
 	float: left;
 	width: 65px;
-	margin: 5px 5px 5px 0px;
+	margin: 5px 0px 0px 0px;
 	text-align:right;
 }
 
@@ -681,11 +693,11 @@ label {
 
 .bootstrap-select.form-control .btn-default {
     color: inherit;
-    padding: 6px 12px;
-    border-radius: 1px;
+    padding: 4px 6px 4px;
+    border-radius: 4px;
     border: 1px solid #e5e6e7;
 	outline: none;
-	height: 34px;
+	height: 31px;
 	background: #FFFFFF none
 }
 
@@ -813,8 +825,13 @@ label {
 	min-height: 75%;
 }
 
-.table-striped .bootstrap-table {
+.table-striped .bootstrap-table, .table-striped .table-bordered {
 	border: 0px!important;
+}
+
+.table-bordered .table>thead>tr>th, .table-bordered .table>tbody>tr>th {
+	font-weight: normal;
+	font-size: 13px
 }
 
 .table-striped table>thead>tr>th, .table-striped table>tbody>tr>th, .table-striped table>tfoot>tr>th, .table-striped table>thead>tr>td, .table-striped table>tbody>tr>td, .table-striped table>tfoot>tr>td {
@@ -822,7 +839,6 @@ label {
 	background-color: transparent;
 	border: 0px;
 }
-
 
 .table-bordered table>thead>tr>th:first-child, .table-bordered table>tbody>tr>td:first-child {
     border-left: 1px solid #ddd;
@@ -848,12 +864,10 @@ label {
 .table-striped .table>thead>tr>th, .table-striped .table>tbody>tr>th {
 	border-bottom: 1px solid #ccc!important;
 	border-top: 0px!important;
-}
-
-.table-striped .table>thead:first-child>tr:first-child>th {
 	font-weight: normal;
 	font-size: 13px
 }
+
 .table-striped table thead {
     background-color: #eff3f8;
 }
@@ -866,48 +880,54 @@ label {
 	height: 32px!important;
 }
 
+/** 表格列宽拖动样式 **/
+.rc-handle-container {
+  position: relative;
+}
+.rc-handle {
+  position: absolute;
+  width: 7px;
+  cursor: ew-resize;
+  margin-left: -3px;
+  z-index: 2;
+}
+table.rc-table-resizing {
+  cursor: ew-resize;
+}
+table.rc-table-resizing thead,
+table.rc-table-resizing thead > th,
+table.rc-table-resizing thead > th > a {
+  cursor: ew-resize;
+}
+
 /** 表格冻结列样式 **/
-.left-fixed-table-columns, .left-fixed-body-columns {
-    position: absolute;
-    background-color: #fff;
-    display: none;
-    box-sizing: border-box;
-    overflow: hidden;
+.fixed-columns, .fixed-columns-right {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background-color: #fff;
+  box-sizing: border-box;
+  z-index: 1;
 }
 
-.left-fixed-table-columns .table, .left-fixed-body-columns .table {
-    border-right: 1px solid #ddd;
+.fixed-columns {
+  left: 0;
 }
 
-.left-fixed-table-columns .table.table-no-bordered, .left-fixed-body-columns .table.table-no-bordered {
-    border-right: 1px solid transparent;
+.fixed-columns .fixed-table-body {
+  overflow: hidden !important;
 }
 
-.left-fixed-body-columns table {
-    position: absolute;
-    animation: none;
+.fixed-columns-right {
+  right: 0;
+}
+
+.fixed-columns-right .fixed-table-body {
+  overflow-x: hidden !important;
 }
 
 .bootstrap-table .table-hover > tbody > tr.hover > td {
     background-color: #f5f5f5;
-}
-
-.right-fixed-table-columns{ 
-    position: absolute;
-    right:63px;
-    border-left:1px solid #ddd;
-    display: none;
-    z-index:100;
-}
-
-/** 表格全屏样式 **/
-.bootstrap-table.fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1050;
-    width: 100%!important;
-    background: #FFF;
 }
 
 /** 表格树样式 **/
@@ -1014,7 +1034,7 @@ label {
 }
 
 /** 表格选中样式 **/
-.fixed-table-container .selected {
+.bootstrap-table .fixed-table-container .table tbody tr.selected td {
     background-color: #E8F7FD;
     color: #1890ff;
 }
@@ -1068,13 +1088,54 @@ label {
 	visibility: visible;
 }
 
+/* 设置菜单样式 */
+.menu-content {
+	padding: 10px 10px 10px 25px !important;
+}
+
+.tab-content > .tab-pane {
+    display: none;
+}
+
+.tab-content > .active {
+    display: block;
+}
+
+.height-full {
+    height: 100% !important;
+}
+
+/* 设置滚动条样式 */
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 10px;
-    background-color: #F5F5F5;
+   width:10px!important;
+   height:10px!important;
+   -webkit-appearance:none;
+   background:#f1f1f1
 }
 
 ::-webkit-scrollbar-thumb {
-	border-radius: 6px;
-	background-color: #999;
+    height:5px;
+    border:1px solid transparent;
+    border-top:0;
+    border-bottom:0;
+    border-radius:6px;
+    background-color:#ccc;
+    background-clip:padding-box
+}
+
+/* 设置placeholder样式 */
+::-webkit-input-placeholder {
+	color: #b3b3b3!important;
+}
+
+:-moz-placeholder {
+	color: #b3b3b3!important;
+}
+
+::-moz-placeholder {
+	color: #b3b3b3!important;
+}
+
+:-ms-input-placeholder {
+	color: #b3b3b3!important;
 }

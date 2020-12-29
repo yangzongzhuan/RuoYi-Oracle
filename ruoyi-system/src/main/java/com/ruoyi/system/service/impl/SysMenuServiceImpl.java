@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.Ztree;
+import com.ruoyi.common.core.domain.entity.SysMenu;
+import com.ruoyi.common.core.domain.entity.SysRole;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.system.domain.SysMenu;
-import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.mapper.SysMenuMapper;
 import com.ruoyi.system.mapper.SysRoleMenuMapper;
 import com.ruoyi.system.service.ISysMenuService;
@@ -356,13 +356,7 @@ public class SysMenuServiceImpl implements ISysMenuService
         {
             if (hasChild(list, tChild))
             {
-                // 判断是否有子节点
-                Iterator<SysMenu> it = childList.iterator();
-                while (it.hasNext())
-                {
-                    SysMenu n = (SysMenu) it.next();
-                    recursionFn(list, n);
-                }
+                recursionFn(list, tChild);
             }
         }
     }

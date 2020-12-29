@@ -128,12 +128,12 @@
                     target.hasSelectItem = true;
                     $th = $('<th style="width:36px"></th>');
                 } else {
-                    $th = $('<th style="' + ((column.width) ? ('width:' + column.width) : '') + '" class="' + column.field + '_cls"></th>');
+                    $th = $('<th style="' + ((column.width) ? ('width:' + column.width + ((column.widthUnit) ? column.widthUnit : 'px')) : '') + '" class="' + column.field + '_cls"></th>');
                 }
                 if((!target.isFixWidth)&& column.width){
                     target.isFixWidth = column.width.indexOf("px")>-1?true:false;
                 }
-                $th.text(column.title);
+                $th.html(column.title);
                 $thr.append($th);
             });
             var $thead = $('<thead class="treetable-thead"></thead>');
@@ -167,6 +167,7 @@
                     success: function(data, textStatus, jqXHR) {
                     	data = calculateObjectValue(options, options.responseHandler, [data], data);
                         renderTable(data);
+                        calculateObjectValue(options, options.onLoadSuccess, [data], data);
                     },
                     error: function(xhr, textStatus) {
                         var _errorMsg = '<tr><td colspan="' + options.columns.length + '"><div style="display: block;text-align: center;">' + xhr.responseText + '</div></td></tr>'
@@ -333,7 +334,7 @@
                 } else {
                     var $td = $('<td name="' + column.field + '" class="' + column.field + '_cls"></td>');
                     if(column.width){
-                        $td.css("width",column.width);
+                        $td.css("width",column.width + (column.widthUnit ? column.widthUnit : 'px'));
                     }
                     if(column.align){
                         $td.css("text-align",column.align);
@@ -737,6 +738,9 @@
         expanderExpandedClass: 'glyphicon glyphicon-chevron-down', // 展开的按钮的图标
         expanderCollapsedClass: 'glyphicon glyphicon-chevron-right', // 缩起的按钮的图标
         responseHandler: function(res) {
+            return false;
+        },
+        onLoadSuccess: function(res) {
             return false;
         }
     };

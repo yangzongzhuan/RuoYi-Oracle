@@ -10,40 +10,35 @@
 	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
 	<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
 	<!-- bootstrap-table 表格插件样式 -->
-	<link th:href="@{/ajax/libs/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/>
+	<link th:href="@{/ajax/libs/bootstrap-table/bootstrap-table.min.css?v=20201129}" rel="stylesheet"/>
 	<link th:href="@{/css/animate.css}" rel="stylesheet"/>
-	<link th:href="@{/css/style.css?v=20200318}" rel="stylesheet"/>
-	<link th:href="@{/ruoyi/css/ry-ui.css}" rel="stylesheet"/>
+	<link th:href="@{/css/style.css?v=20200903}" rel="stylesheet"/>
+	<link th:href="@{/ruoyi/css/ry-ui.css?v=4.5.1}" rel="stylesheet"/>
 </head>
 
 <!-- 通用JS -->
 <div th:fragment="footer">
+    <script th:inline="javascript"> var ctx = [[@{/}]]; var lockscreen = [[${session.lockscreen}]]; if(lockscreen){window.top.location=ctx+"lockscreen";} </script>
     <a id="scroll-up" href="#" class="btn btn-sm display"><i class="fa fa-angle-double-up"></i></a>
 	<script th:src="@{/js/jquery.min.js}"></script>
 	<script th:src="@{/js/bootstrap.min.js}"></script>
 	<!-- bootstrap-table 表格插件 -->
-	<script th:src="@{/ajax/libs/bootstrap-table/bootstrap-table.min.js?v=20200423}"></script>
-	<script th:src="@{/ajax/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"></script>
-	<script th:src="@{/ajax/libs/bootstrap-table/extensions/mobile/bootstrap-table-mobile.js}"></script>
-	<script th:src="@{/ajax/libs/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js}"></script>
-	<script th:src="@{/ajax/libs/bootstrap-table/extensions/columns/bootstrap-table-fixed-columns.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/bootstrap-table.min.js?v=20201129}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js?v=20201129}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js?v=20201129}"></script>
 	<!-- jquery-validate 表单验证插件 -->
 	<script th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
 	<script th:src="@{/ajax/libs/validate/messages_zh.min.js}"></script>
 	<script th:src="@{/ajax/libs/validate/jquery.validate.extend.js}"></script>
 	<!-- jquery-validate 表单树插件 -->
 	<script th:src="@{/ajax/libs/bootstrap-treetable/bootstrap-treetable.js}"></script>
-	<!-- jquery-export 表格导出插件 -->
-	<script th:src="@{/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js}"></script>
-	<script th:src="@{/ajax/libs/bootstrap-table/extensions/export/tableExport.js}"></script>
 	<!-- 遮罩层 -->
 	<script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
     <script th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
 	<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
 	<script th:src="@{/ajax/libs/layui/layui.js}"></script>
-	<script th:src="@{/ruoyi/js/common.js?v=4.2.0}"></script>
-	<script th:src="@{/ruoyi/js/ry-ui.js?v=4.2.0}"></script>
-	<script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+	<script th:src="@{/ruoyi/js/common.js?v=4.5.1}"></script>
+	<script th:src="@{/ruoyi/js/ry-ui.js?v=4.5.1}"></script>
 </div>
 
 <!-- ztree树插件 -->
@@ -97,12 +92,12 @@
 	<script th:src="@{/ajax/libs/summernote/summernote-zh-CN.js}"></script>
 </div>
 
-<!-- cropbox图像裁剪插件 -->
-<div th:fragment="cropbox-css">
-    <link th:href="@{/ajax/libs/cropbox/cropbox.css}" rel="stylesheet"/>
+<!-- cropper图像裁剪插件 -->
+<div th:fragment="cropper-css">
+    <link th:href="@{/ajax/libs/cropper/cropper.min.css}" rel="stylesheet"/>
 </div>
-<div th:fragment="cropbox-js">
-    <script th:src="@{/ajax/libs/cropbox/cropbox.js}"></script>
+<div th:fragment="cropper-js">
+    <script th:src="@{/ajax/libs/cropper/cropper.min.js}"></script>
 </div>
 
 <!-- jasny功能扩展插件 -->
@@ -115,10 +110,10 @@
 
 <!-- fileinput文件上传插件 -->
 <div th:fragment="bootstrap-fileinput-css">
-    <link th:href="@{/ajax/libs/bootstrap-fileinput/fileinput.min.css}" rel="stylesheet"/>
+    <link th:href="@{/ajax/libs/bootstrap-fileinput/fileinput.min.css?v=20201202}" rel="stylesheet"/>
 </div>
 <div th:fragment="bootstrap-fileinput-js">
-    <script th:src="@{/ajax/libs/bootstrap-fileinput/fileinput.min.js}"></script>
+    <script th:src="@{/ajax/libs/bootstrap-fileinput/fileinput.min.js?v=20201202}"></script>
 </div>
 
 <!-- duallistbox双列表框插件 -->
@@ -139,6 +134,11 @@
     <script th:src="@{/ajax/libs/typeahead/bootstrap3-typeahead.min.js}"></script>
 </div>
 
+<!-- 多级联动下拉 -->
+<div th:fragment="jquery-cxselect-js">
+    <script th:src="@{/ajax/libs/cxselect/jquery.cxselect.min.js}"></script>
+</div>
+
 <!-- jsonview格式化和语法高亮JSON格式数据查看插件 -->
 <div th:fragment="jsonview-css">
     <link th:href="@{/ajax/libs/jsonview/jquery.jsonview.css}" rel="stylesheet"/>
@@ -147,12 +147,12 @@
     <script th:src="@{/ajax/libs/jsonview/jquery.jsonview.js}"></script>
 </div>
 
-<!-- jquery.steps表单向导插件 -->
-<div th:fragment="jquery-steps-css">
-    <link th:href="@{/ajax/libs/staps/jquery.steps.css}" rel="stylesheet"/>
+<!-- jquery.smartwizard表单向导插件 -->
+<div th:fragment="jquery-smartwizard-css">
+    <link th:href="@{/ajax/libs/smartwizard/smart_wizard_all.min.css}" rel="stylesheet"/>
 </div>
-<div th:fragment="jquery-steps-js">
-    <script th:src="@{/ajax/libs/staps/jquery.steps.min.js}"></script>
+<div th:fragment="jquery-smartwizard-js">
+    <script th:src="@{/ajax/libs/smartwizard/jquery.smartWizard.min.js}"></script>
 </div>
 
 <!-- ECharts百度统计图表插件 -->
@@ -176,11 +176,38 @@
 	<script th:src="@{/ajax/libs/bootstrap-table/extensions/reorder/jquery.tablednd.js}"></script>
 </div>
 
+<!-- 表格列宽拖动插件 -->
+<div th:fragment="bootstrap-table-resizable-js">
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/resizable/jquery.resizableColumns.min.js}"></script>
+    <script th:src="@{/ajax/libs/bootstrap-table/extensions/resizable/bootstrap-table-resizable.min.js?v=20201129}"></script>
+</div>
+
 <!-- 表格行内编辑插件 -->
 <div th:fragment="bootstrap-editable-css">
     <link th:href="@{/ajax/libs/bootstrap-table/extensions/editable/bootstrap-editable.css}" rel="stylesheet"/>
 </div>
 <div th:fragment="bootstrap-table-editable-js">
 	<script th:src="@{/ajax/libs/bootstrap-table/extensions/editable/bootstrap-editable.min.js}"></script>
-    <script th:src="@{/ajax/libs/bootstrap-table/extensions/editable/bootstrap-table-editable.js}"></script>
+    <script th:src="@{/ajax/libs/bootstrap-table/extensions/editable/bootstrap-table-editable.min.js?v=20201129}"></script>
+</div>
+
+<!-- 表格导出插件 -->
+<div th:fragment="bootstrap-table-export-js">
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/export/tableExport.js}"></script>
+</div>
+
+<!-- 表格冻结列插件 -->
+<div th:fragment="bootstrap-table-fixed-columns-js">
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/columns/bootstrap-table-fixed-columns.min.js?v=20201129}"></script>
+</div>
+
+<!-- 表格自动刷新插件 -->
+<div th:fragment="bootstrap-table-auto-refresh-js">
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js?v=20201129}"></script>
+</div>
+
+<!-- 表格打印插件 -->
+<div th:fragment="bootstrap-table-print-js">
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/print/bootstrap-table-print.min.js?v=20200729}"></script>
 </div>

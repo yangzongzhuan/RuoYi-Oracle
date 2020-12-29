@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
+import com.ruoyi.common.core.domain.entity.SysRole;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.system.domain.SysPost;
-import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.SysUserPost;
 import com.ruoyi.system.domain.SysUserRole;
 import com.ruoyi.system.mapper.SysPostMapper;
@@ -160,6 +160,7 @@ public class SysUserServiceImpl implements ISysUserService
      * @return 结果
      */
     @Override
+    @Transactional
     public int deleteUserById(Long userId)
     {
         // 删除用户与角色关联
@@ -176,6 +177,7 @@ public class SysUserServiceImpl implements ISysUserService
      * @return 结果
      */
     @Override
+    @Transactional
     public int deleteUserByIds(String ids) throws BusinessException
     {
         Long[] userIds = Convert.toLongArray(ids);
@@ -183,6 +185,10 @@ public class SysUserServiceImpl implements ISysUserService
         {
             checkUserAllowed(new SysUser(userId));
         }
+        // 删除用户与角色关联
+        userRoleMapper.deleteUserRole(userIds);
+        // 删除用户与岗位关联
+        userPostMapper.deleteUserPost(userIds);
         return userMapper.deleteUserByIds(userIds);
     }
 

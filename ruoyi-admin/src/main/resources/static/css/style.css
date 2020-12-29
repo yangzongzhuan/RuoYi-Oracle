@@ -46,18 +46,18 @@ a:focus {
     /*white-space: nowrap;*/
 }
 
-.nav.navbar-right>li>a {
+.nav.navbar-right>li>a, .nav.navbar-left>li>a {
 	color: #fff;
 	font-size: 14px;
 	height: 50px;
-	padding: 18px 15px;
+	padding:15px 15px;
 }
 
 .nav>li.active>a {
     color: #ffffff;
 }
 
-.nav.navbar-right>li>a>.label {
+.nav.navbar-right>li>a>.label, .nav.navbar-left>li>a>.label {
 	position: absolute;
 	top: 9px;
 	right: 5px;
@@ -66,7 +66,7 @@ a:focus {
 	padding: 2px 4px;
 	line-height: .9;
 }
-.nav.navbar-right>li>a:hover {
+.nav.navbar-right>li>a:hover, .nav.navbar-left>li>a:hover {
 	background-color: #367fa9;
 	color: #fff;
 }
@@ -280,6 +280,8 @@ body.body-small .navbar-top-links li:last-child {
 
 .nav-second-level li, .nav-third-level li {
     border-bottom: none !important;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 .nav-second-level li a {
@@ -288,7 +290,7 @@ body.body-small .navbar-top-links li:last-child {
 }
 
 .nav-third-level li a {
-    padding-left: 62px;
+    padding-left: 70px;
 }
 
 .nav-second-level li:last-child {
@@ -305,6 +307,10 @@ body:not(.fixed-sidebar ):not(.canvas-menu ).mini-navbar .nav li:hover>.nav-seco
 body.mini-navbar .navbar-default .nav>li>.nav-second-level li a {
     font-size: 12px;
     border-radius: 0 2px 2px 0;
+}
+
+body.mini-navbar .navbar-default .nav>li>.nav-third-level li a {
+    padding-left: 31px;
 }
 
 .fixed-nav .slimScrollDiv #side-menu {
@@ -473,13 +479,12 @@ body.body-small.fixed-sidebar.mini-navbar .navbar-static-side {
     border-left-width: 0;
 }
 
-/*伸缩菜单*/
+/* 伸缩菜单 */
 .fixed-sidebar.mini-navbar .nav li:hover>a> span.nav-label {
     top: 0px;
     padding: 10px 10px 10px 10px;
     text-align: center;
     background-color: #243747;
-    border-bottom: dashed 1px #fff;
 }
 
 .fixed-sidebar.mini-navbar .nav li:hover>.nav-second-level {
@@ -495,6 +500,15 @@ body.body-small.fixed-sidebar.mini-navbar .navbar-static-side {
     min-width: 140px;
     border-radius: 2px;
 }
+
+.fixed-sidebar.mini-navbar .nav li.active:hover>.nav-second-level, .fixed-sidebar.mini-navbar .nav li.active:hover>a> span.nav-label {
+    left: 67px;
+}
+
+.fixed-sidebar.mini-navbar .nav .nav-second-level a> span, .fixed-sidebar.mini-navbar .nav .nav-third-level a> span {
+    display: inline-block;
+}
+
 /*伸缩菜单结束*/
 
 body.fixed-sidebar.mini-navbar .navbar-default .nav>li>.nav-second-level li a {
@@ -865,7 +879,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     color: #cacaca;
 }
 
-.form-control, .form-control:focus, .has-error .form-control:focus,  .has-success .form-control:focus, .has-warning .form-control:focus,  .navbar-collapse, .navbar-form, .navbar-form-custom .form-control:focus,  .navbar-form-custom .form-control:hover, .open .btn.dropdown-toggle,  .panel, .popover, .progress, .progress-bar {
+.form-control, .has-error .form-control:focus,  .has-success .form-control:focus, .has-warning .form-control:focus,  .navbar-collapse, .navbar-form, .navbar-form-custom .form-control:focus,  .navbar-form-custom .form-control:hover, .open .btn.dropdown-toggle,  .panel, .popover, .progress, .progress-bar {
     box-shadow: none;
 }
 
@@ -1161,6 +1175,8 @@ button.dim:active:before {
 /* TOOLTIPS */
 .tooltip-inner {
     background-color: #2F4050;
+   	word-break: break-all;
+    overflow-wrap: break-word;
 }
 
 .tooltip.top .tooltip-arrow {
@@ -1818,18 +1834,23 @@ table.dataTable thead .sorting:after {
 .form-control, .single-line {
     background: #FFFFFF none;
     border: 1px solid #e5e6e7;
-    border-radius: 1px;
+    border-radius: 4px;
     color: inherit;
     display: block;
-    padding: 6px 12px;
+    padding: 3px 6px 4px;
     -webkit-transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s  ease-in-out 0s;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s  ease-in-out 0s;
     width: 100%;
+    height: 31px;
     font-size: 14px;
 }
 
+.form-control.kv-fileinput-caption {
+    height: 34px!important;
+}
+
 .form-control:focus, .single-line:focus {
-    border-color: #1ab394 !important;
+    border-color: #3c8dbc !important;
 }
 
 .has-success .form-control {
@@ -1858,8 +1879,8 @@ table.dataTable thead .sorting:after {
 
 .input-group-addon {
     background-color: #fff;
-    border: 1px solid #E5E6E7;
-    border-radius: 1px;
+    border: 1px solid #e5e6e7;
+    border-radius: 4px;
     color: inherit;
     font-size: 14px;
     font-weight: 400;
@@ -3249,7 +3270,7 @@ body.body-small .footer.fixed {
     position: relative;
     height: 39px;
     background: #fafafa;
-    line-height: 38px;
+    line-height: 39px;
 }
 
 .content-tabs .roll-nav, .page-tabs-list {
@@ -4916,13 +4937,14 @@ dd.project-people {
     font-size: 10px;
     text-transform: uppercase;
 }
+
 /* Chat view */
 .message-input {
     height: 90px !important;
 }
 
 .chat-avatar {
-    white: 36px;
+    width: 36px;
     height: 36px;
     float: left;
     margin-right: 10px;
@@ -4949,9 +4971,10 @@ dd.project-people {
     margin-left: -30px;
 }
 
-@media ( max-width : 992px) {
-    .chat-users, .chat-statistic {
-        margin-left: 0px;
+@media (max-width: 992px) {
+    .chat-users,
+    .chat-statistic {
+        margin-left: 0;
     }
 }
 
@@ -4971,12 +4994,12 @@ dd.project-people {
     margin-top: 1px;
 }
 
-.chat-discussion .chat-message:nth-child(2n+1) .message-avatar {
+.chat-discussion .chat-message.left .message-avatar {
     float: left;
     margin-right: 10px;
 }
 
-.chat-discussion .chat-message:nth-child(2n) .message-avatar {
+.chat-discussion .chat-message.right .message-avatar {
     float: right;
     margin-left: 10px;
 }
@@ -4991,20 +5014,20 @@ dd.project-people {
     border-radius: 4px;
 }
 
-.chat-discussion .chat-message:nth-child(2n+1) .message-date {
+.chat-discussion .chat-message.left .message-date {
     float: right;
 }
 
-.chat-discussion .chat-message:nth-child(2n) .message-date {
+.chat-discussion .chat-message.right .message-date {
     float: left;
 }
 
-.chat-discussion .chat-message:nth-child(2n+1) .message {
+.chat-discussion .chat-message.left .message {
     text-align: left;
     margin-left: 55px;
 }
 
-.chat-discussion .chat-message:nth-child(2n) .message {
+.chat-discussion .chat-message.right .message {
     text-align: right;
     margin-right: 55px;
 }
@@ -5033,6 +5056,7 @@ dd.project-people {
 .chat-message-form .form-group {
     margin-bottom: 0;
 }
+
 /* jsTree */
 .jstree-open>.jstree-anchor>.fa-folder:before {
     content: "\f07c";
@@ -6865,7 +6889,7 @@ body.rtls .top-navigation .footer.fixed, body.rtls.top-navigation .footer.fixed 
 }
 
 .navbar-header {
-	width: 10%;
+	/* width: 10%; */
 	height: 50px;
 }
 

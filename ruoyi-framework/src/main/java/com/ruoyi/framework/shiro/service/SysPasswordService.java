@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.ShiroConstants;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
 import com.ruoyi.common.exception.user.UserPasswordRetryLimitExceedException;
 import com.ruoyi.common.utils.MessageUtils;
 import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
-import com.ruoyi.system.domain.SysUser;
 
 /**
  * 登录密码方法
@@ -73,18 +73,13 @@ public class SysPasswordService
         return user.getPassword().equals(encryptPassword(user.getLoginName(), newPassword, user.getSalt()));
     }
 
-    public void clearLoginRecordCache(String username)
+    public void clearLoginRecordCache(String loginName)
     {
-        loginRecordCache.remove(username);
-    }
-
-    public String encryptPassword(String username, String password, String salt)
-    {
-        return new Md5Hash(username + password + salt).toHex();
-    }
-
-    public void unlock(String loginName){
         loginRecordCache.remove(loginName);
     }
 
+    public String encryptPassword(String loginName, String password, String salt)
+    {
+        return new Md5Hash(loginName + password + salt).toHex();
+    }
 }

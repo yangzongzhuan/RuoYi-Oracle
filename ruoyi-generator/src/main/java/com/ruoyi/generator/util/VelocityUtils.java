@@ -22,6 +22,9 @@ public class VelocityUtils
 
     /** html空间路径 */
     private static final String TEMPLATES_PATH = "main/resources/templates";
+    
+    /** 默认上级菜单，系统工具 */
+    private static final String DEFAULT_PARENT_MENU_ID = "3";
 
     /**
      * 设置模板变量信息
@@ -49,15 +52,28 @@ public class VelocityUtils
         velocityContext.put("author", genTable.getFunctionAuthor());
         velocityContext.put("datetime", DateUtils.getDate());
         velocityContext.put("pkColumn", genTable.getPkColumn());
-        velocityContext.put("importList", getImportList(genTable.getColumns()));
+        velocityContext.put("importList", getImportList(genTable));
         velocityContext.put("permissionPrefix", getPermissionPrefix(moduleName, businessName));
         velocityContext.put("columns", genTable.getColumns());
         velocityContext.put("table", genTable);
+        setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory))
         {
             setTreeVelocityContext(velocityContext, genTable);
         }
+        if (GenConstants.TPL_SUB.equals(tplCategory))
+        {
+            setSubVelocityContext(velocityContext, genTable);
+        }
         return velocityContext;
+    }
+
+    public static void setMenuVelocityContext(VelocityContext context, GenTable genTable)
+    {
+        String options = genTable.getOptions();
+        JSONObject paramsObj = JSONObject.parseObject(options);
+        String parentMenuId = getParentMenuId(paramsObj);
+        context.put("parentMenuId", parentMenuId);
     }
 
     public static void setTreeVelocityContext(VelocityContext context, GenTable genTable)
@@ -82,6 +98,24 @@ public class VelocityUtils
         }
     }
 
+    public static void setSubVelocityContext(VelocityContext context, GenTable genTable)
+    {
+        GenTable subTable = genTable.getSubTable();
+        String subTableName = genTable.getSubTableName();
+        String subTableFkName = genTable.getSubTableFkName();
+        String subClassName = genTable.getSubTable().getClassName();
+        String subTableFkClassName = StringUtils.convertToCamelCase(subTableFkName);
+
+        context.put("subTable", subTable);
+        context.put("subTableName", subTableName);
+        context.put("subTableFkName", subTableFkName);
+        context.put("subTableFkClassName", subTableFkClassName);
+        context.put("subTableFkclassName", StringUtils.uncapitalize(subTableFkClassName));
+        context.put("subClassName", subClassName);
+        context.put("subclassName", StringUtils.uncapitalize(subClassName));
+        context.put("subImportList", getImportList(genTable.getSubTable()));
+    }
+
     /**
      * 获取模板信息
      * 
@@ -104,6 +138,11 @@ public class VelocityUtils
         {
             templates.add("vm/html/tree.html.vm");
             templates.add("vm/html/list-tree.html.vm");
+        }
+        else if (GenConstants.TPL_SUB.equals(tplCategory))
+        {
+            templates.add("vm/html/list.html.vm");
+            templates.add("vm/java/sub-domain.java.vm");
         }
         templates.add("vm/html/add.html.vm");
         templates.add("vm/html/edit.html.vm");
@@ -134,6 +173,10 @@ public class VelocityUtils
         if (template.contains("domain.java.vm"))
         {
             fileName = StringUtils.format("{}/domain/{}.java", javaPath, className);
+        }
+        if (template.contains("sub-domain.java.vm") && StringUtils.equals(GenConstants.TPL_SUB, genTable.getTplCategory()))
+        {
+            fileName = StringUtils.format("{}/domain/{}.java", javaPath, genTable.getSubTable().getClassName());
         }
         else if (template.contains("mapper.java.vm"))
         {
@@ -213,17 +256,24 @@ public class VelocityUtils
     /**
      * 根据列类型获取导入包
      * 
-     * @param column 列集合
+     * @param genTable 业务表对象
      * @return 返回需要导入的包列表
      */
-    public static HashSet<String> getImportList(List<GenTableColumn> columns)
+    public static HashSet<String> getImportList(GenTable genTable)
     {
+        List<GenTableColumn> columns = genTable.getColumns();
+        GenTable subGenTable = genTable.getSubTable();
         HashSet<String> importList = new HashSet<String>();
+        if (StringUtils.isNotNull(subGenTable))
+        {
+            importList.add("java.util.List");
+        }
         for (GenTableColumn column : columns)
         {
             if (!column.isSuperColumn() && GenConstants.TYPE_DATE.equals(column.getJavaType()))
             {
                 importList.add("java.util.Date");
+                importList.add("com.fasterxml.jackson.annotation.JsonFormat");
             }
             else if (!column.isSuperColumn() && GenConstants.TYPE_BIGDECIMAL.equals(column.getJavaType()))
             {
@@ -243,7 +293,21 @@ public class VelocityUtils
     public static String getPermissionPrefix(String moduleName, String businessName)
     {
         return StringUtils.format("{}:{}", moduleName, businessName);
+    }
 
+    /**
+     * 获取上级菜单ID字段
+     * 
+     * @param options 生成其他选项
+     * @return 上级菜单ID字段
+     */
+    public static String getParentMenuId(JSONObject paramsObj)
+    {
+        if (StringUtils.isNotEmpty(paramsObj) && paramsObj.containsKey(GenConstants.PARENT_MENU_ID))
+        {
+            return paramsObj.getString(GenConstants.PARENT_MENU_ID);
+        }
+        return DEFAULT_PARENT_MENU_ID;
     }
 
     /**
@@ -258,7 +322,7 @@ public class VelocityUtils
         {
             return StringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_CODE));
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -273,7 +337,7 @@ public class VelocityUtils
         {
             return StringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_PARENT_CODE));
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -288,7 +352,7 @@ public class VelocityUtils
         {
             return StringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_NAME));
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**

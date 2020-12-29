@@ -13,6 +13,9 @@ public class GenConstants
     /** 树表（增删改查） */
     public static final String TPL_TREE = "tree";
 
+    /** 主子表（增删改查） */
+    public static final String TPL_SUB = "sub";
+
     /** 树编码字段 */
     public static final String TREE_CODE = "treeCode";
 
@@ -22,16 +25,24 @@ public class GenConstants
     /** 树名称字段 */
     public static final String TREE_NAME = "treeName";
 
+    /** 上级菜单ID字段 */
+    public static final String PARENT_MENU_ID = "parentMenuId";
+
+    /** 上级菜单名称字段 */
+    public static final String PARENT_MENU_NAME = "parentMenuName";
+
     /** 数据库字符串类型 */
-    public static final String[] COLUMNTYPE_STR = { "char", "varchar", "narchar", "varchar2", "tinytext", "text",
-            "mediumtext", "longtext" };
+    public static final String[] COLUMNTYPE_STR = { "char", "varchar", "nvarchar", "varchar2" };
+
+    /** 数据库文本类型 */
+    public static final String[] COLUMNTYPE_TEXT = { "tinytext", "text", "mediumtext", "longtext" };
 
     /** 数据库时间类型 */
     public static final String[] COLUMNTYPE_TIME = { "datetime", "time", "date", "timestamp" };
 
     /** 数据库数字类型 */
     public static final String[] COLUMNTYPE_NUMBER = { "tinyint", "smallint", "mediumint", "int", "number", "integer",
-            "bigint", "float", "float", "double", "decimal" };
+            "bit", "bigint", "float", "double", "decimal" };
 
     /** 页面不需要编辑字段 */
     public static final String[] COLUMNNAME_NOT_EDIT = { "id", "create_by", "create_time", "del_flag" };
@@ -67,6 +78,12 @@ public class GenConstants
 
     /** 日期控件 */
     public static final String HTML_DATETIME = "datetime";
+
+    /** 上传控件 */
+    public static final String HTML_UPLOAD = "upload";
+
+    /** 富文本控件 */
+    public static final String HTML_SUMMERNOTE = "summernote";
 
     /** 字符串类型 */
     public static final String TYPE_STRING = "String";

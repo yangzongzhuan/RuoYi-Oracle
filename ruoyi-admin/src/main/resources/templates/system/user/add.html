@@ -35,7 +35,10 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label is-required">手机号码：</label>
                         <div class="col-sm-8">
-                            <input id="phonenumber" name="phonenumber" placeholder="请输入手机号码" class="form-control" type="text" maxlength="11" required>
+                            <div class="input-group">
+                                <input id="phonenumber" name="phonenumber" placeholder="请输入手机号码" class="form-control" type="text" maxlength="11" required>
+                                <span class="input-group-addon"><i class="fa fa-mobile"></i></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -43,7 +46,10 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label is-required">邮箱：</label>
                         <div class="col-sm-8">
-                            <input id="email" name="email" class="form-control email" type="text" maxlength="20" placeholder="请输入邮箱" required>
+                            <div class="input-group">
+                                <input id="email" name="email" class="form-control email" type="text" maxlength="50" placeholder="请输入邮箱" required>
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -61,7 +67,12 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label is-required">登录密码：</label>
                         <div class="col-sm-8">
-                            <input name="password" placeholder="请输入登录密码" class="form-control" type="password" th:value="${@config.getKey('sys.user.initPassword')}" required>
+                            <div class="input-group">
+                                <input id="password" name="password" placeholder="请输入登录密码" class="form-control" type="password" th:value="${@config.getKey('sys.user.initPassword')}" required>
+                                <span class="input-group-addon" title="登录密码,鼠标按下显示密码"
+                                    onmousedown="$('#password').attr('type','text')"
+                                    onmouseup="$('#password').attr('type','password')"><i class="fa fa-key"></i></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -210,7 +221,9 @@
         });
         
         function submitHandler() {
-	        if ($.validate.form()) {
+        	var chrtype = [[${#strings.defaultString(@config.getKey('sys.account.chrtype'), 0)}]];
+			var password = $("#password").val();
+	        if ($.validate.form() && checkpwd(chrtype, password)) {
 	        	var data = $("#form-user-add").serializeArray();
 	        	var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
 	        	var roleIds = $.form.selectCheckeds("role");
@@ -222,7 +235,7 @@
 	        }
 	    }
          
-        /*用户管理-新增-选择部门树*/
+        /* 用户管理-新增-选择部门树 */
         function selectDeptTree() {
         	var treeId = $("#treeId").val();
         	var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
@@ -238,12 +251,10 @@
 		
 		function doSubmit(index, layero){
 			var tree = layero.find("iframe")[0].contentWindow.$._tree;
-			if ($.tree.notAllowParents(tree)) {
-				var body = layer.getChildFrame('body', index);
-    			$("#treeId").val(body.find('#treeId').val());
-    			$("#treeName").val(body.find('#treeName').val());
-    			layer.close(index);
-			}
+			var body = layer.getChildFrame('body', index);
+   			$("#treeId").val(body.find('#treeId').val());
+   			$("#treeName").val(body.find('#treeName').val());
+   			layer.close(index);
 		}
 
 		$(function() {

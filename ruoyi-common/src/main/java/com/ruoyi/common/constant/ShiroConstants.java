@@ -5,7 +5,7 @@ package com.ruoyi.common.constant;
  * 
  * @author ruoyi
  */
-public interface ShiroConstants
+public class ShiroConstants
 {
     /**
      * 当前登录的用户
@@ -13,9 +13,14 @@ public interface ShiroConstants
     public static final String CURRENT_USER = "currentUser";
 
     /**
-     * 用户名
+     * 用户名字段
      */
     public static final String CURRENT_USERNAME = "username";
+
+    /**
+     * 锁定屏幕字段
+     */
+    public static final String LOCK_SCREEN = "lockscreen";
 
     /**
      * 消息key

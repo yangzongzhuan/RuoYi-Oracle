@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import com.google.code.kaptcha.Constants;
 import com.ruoyi.common.constant.ShiroConstants;
+import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.framework.util.ShiroUtils;
 
 /**
  * 验证码过滤器
@@ -61,6 +61,8 @@ public class CaptchaValidateFilter extends AccessControlFilter
     {
         Object obj = ShiroUtils.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
         String code = String.valueOf(obj != null ? obj : "");
+        // 验证码清除，防止多次使用。
+        request.getSession().removeAttribute(Constants.KAPTCHA_SESSION_KEY);
         if (StringUtils.isEmpty(validateCode) || !validateCode.equalsIgnoreCase(code))
         {
             return false;

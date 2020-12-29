@@ -92,6 +92,7 @@
 					                            <select class='form-control' id="tplCategory" name='tplCategory' style="width: 100%">
 												    <option value="crud" th:field="*{tplCategory}">单表（增删改查）</option>
 												    <option value="tree" th:field="*{tplCategory}">树表（增删改查）</option>
+												    <option value="sub" th:field="*{tplCategory}">主子表（增删改查）</option>
 												</select>
 					                        </div>
 					                    </div>
@@ -132,6 +133,72 @@
 					                        </div>
 					                    </div>
 					                </div>
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required" title="分配到指定菜单下，例如 系统管理">上级菜单：<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+					                            <input id="parentMenuId" name="params[parentMenuId]" type="hidden" th:value="*{parentMenuId}"/>
+					                            <div class="input-group">
+												    <input id="parentMenuName" name="params[parentMenuName]" class="form-control" type="text" onclick="selectMenuTree()" placeholder="请选择上级菜单" maxlength="50" th:value="*{parentMenuName}" required>
+											        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+											    </div>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					            <div class="row">
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label" title="默认为zip压缩包下载，也可以自定义生成路径">生成代码方式：<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+                                                <label class="radio-box"> <input type="radio" name="genType" value="0" th:field="*{genType}" /> zip压缩包 </label> 
+                                                <label class="radio-box"> <input type="radio" name="genType" value="1" th:field="*{genType}" /> 自定义路径</label> 
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					            <div class="hidden row" id="pathinfo">
+					                <div class="col-sm-12">
+					                    <div class="form-group">
+					                        <label class="col-xs-2 control-label" title="填写磁盘绝对路径，若不填写，则生成到当前Web项目下">生成基础路径：<i class="fa fa-question-circle-o"></i></label>
+						                    <div class="col-xs-10">
+						                        <div class="input-group input-group-sm">
+						                            <input id="genPath" name="genPath" class="form-control" type="text" th:field="*{genPath}" placeholder="请输入项目路径" maxlength="200">
+						                            <div class="input-group-btn">
+						                               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">最近路径快速选择 <span class="caret"></span></button>
+															<ul class="dropdown-menu dropdown-menu-right" role="menu">
+																<li><a href="javascript:$('#genPath').val('/')"><i class="fa fa-refresh"></i>恢复默认的生成基础路径</a></li>
+															</ul>
+														</div>
+													</div>
+						                    </div>
+					                    </div>
+					                </div>
+					            </div>
+					            <div class="hidden" id="subInfo">
+					            <h4 class="form-header h4">关联信息</h4>
+					            <div class="row">
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required" title="关联子表的表名， 如：sys_user">关联子表的表名：<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+					                            <select class='type form-control' id="subTableName" name='subTableName' th:attr='data-value=*{subTableName}' style="width: 100%">
+					                                <option value="">---请选择---</option>
+												</select>
+					                        </div>
+					                    </div>
+					                </div>
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required" title="子表关联的外键名， 如：user_id">子表关联的外键名：<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+					                            <select class='router form-control' id="subTableFkName" name='subTableFkName' th:attr='data-value=*{subTableFkName}' style="width: 100%">
+					                                <option value="">---请选择---</option>
+												</select>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
 					            </div>
 					            <div class="hidden" id="otherInfo">
 					            <h4 class="form-header h4">其他信息</h4>
@@ -192,8 +259,9 @@
     <th:block th:include="include :: select2-js" />
     <th:block th:include="include :: bootstrap-table-reorder-js" />
     <script th:src="@{/js/jquery.tmpl.js}"></script>
-    <script type="text/javascript">
-	    /*用户信息-修改*/
+    <th:block th:include="include :: jquery-cxselect-js" />
+    <script th:inline="javascript">
+	    /* 用户信息-修改 */
 	    $("#form-table-edit").validate({
 	    	rules: {
 	    	    tableName: {
@@ -201,7 +269,15 @@
 	    	    },
 	    	},
 			focusCleanup: true
-		}); 
+		});
+	    
+	    /* 表级联信息 */
+   		var data = [[${data}]];
+    	$('#subInfo').cxSelect({
+    	  selects: ['type', 'router'],
+    	  jsonValue: 'v',
+    	  data: data
+    	});
 	    
 	    function submitHandler() {
 	        if ($.validate.form()) {
@@ -391,6 +467,8 @@
 		$(function() {
             var tplCategory = $("#tplCategory option:selected").val();
             tplCategoryVisible(tplCategory);
+            var genType = $('input[name="genType"]:checked').val();
+            pathInfoVisible(genType);
         });
 		
 		$('#tplCategory').on('select2:select', function (event) {
@@ -404,14 +482,35 @@
 				$("#treeParentCode").select2("val", [""]);
 				$("#treeName").select2("val", [""]);
 				$("#otherInfo").addClass("hidden");
-				
+				$("#subInfo").addClass("hidden");
 			} else if("tree" == tplCategory){
 				$("#otherInfo").removeClass("hidden");
 				$("#treeCode").attr("required", "true");
 				$("#treeParentCode").attr("required", "true");
 				$("#treeName").attr("required", "true");
+				$("#subInfo").addClass("hidden");
+			} else if("sub" == tplCategory){
+				$("#subInfo").removeClass("hidden");
+				$("#treeCode").select2("val", [""]);
+				$("#treeParentCode").select2("val", [""]);
+				$("#treeName").select2("val", [""]);
+				$("#otherInfo").addClass("hidden");
 			}
         }
+		
+		$('input').on('ifChecked', function(event){
+			var genType = $(event.target).val();
+			pathInfoVisible(genType);
+		});
+		
+		function pathInfoVisible(genType) {
+			if("0" == genType){
+				$("#genPath").val("/");
+				$("#pathinfo").addClass("hidden");
+			} else if("1" == genType){
+				$("#pathinfo").removeClass("hidden");
+			}
+		}
 		
 		// 选择字典处理函数
 		function selectDictTree(columnId, obj) {
@@ -421,17 +520,38 @@
 				title: '选择字典类型',
 				width: "380",
 				url: url,
-				callBack: doSubmit
+				callBack: doDictSubmit
 			};
 			$.modal.openOptions(options);
 		}
 		
-		function doSubmit(index, layero){
+		// 选择菜单处理函数
+        function selectMenuTree() {
+        	var parentMenuId = $("#parentMenuId").val();
+        	var menuId = parentMenuId > 0 ? parentMenuId : 1;
+        	var url = ctx + "system/menu/selectMenuTree/" + menuId;
+			var options = {
+				title: '菜单选择',
+				width: "380",
+				url: url,
+				callBack: doMenuSubmit
+			};
+			$.modal.openOptions(options);
+		}
+		
+		function doDictSubmit(index, layero){
 			var body = layer.getChildFrame('body', index);
    			var columnId = body.find('#columnId').val();
    			var dictType = body.find('#dictType').val();
    			layer.close(index);
    			$("#columns_dict_" + columnId).val(dictType);
+		}
+		
+		function doMenuSubmit(index, layero){
+			var body = layer.getChildFrame('body', index);
+   			$("#parentMenuId").val(body.find('#treeId').val());
+   			$("#parentMenuName").val(body.find('#treeName').val());
+   			layer.close(index);
 		}
     </script>
 </body>
@@ -477,7 +597,9 @@
     <option value="select" {{if htmlType==="select"}}selected{{/if}}>下拉框</option>
     <option value="radio" {{if htmlType==="radio"}}selected{{/if}}>单选框</option>
     <option value="checkbox" {{if htmlType==="checkbox"}}selected{{/if}}>复选框</option>
+    <option value="summernote" {{if htmlType==="summernote"}}selected{{/if}}>富文本</option>
     <option value="datetime" {{if htmlType==="datetime"}}selected{{/if}}>日期控件</option>
+    <option value="upload" {{if htmlType==="upload"}}selected{{/if}}>上传控件</option>
 </select>
 </div>
 </script>

@@ -1,7 +1,7 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
-import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.system.domain.SysUserRole;
 
 /**
@@ -90,7 +90,7 @@ public interface ISysUserService
      * @return 结果
      * @throws Exception 异常
      */
-    public int deleteUserByIds(String ids) throws Exception;
+    public int deleteUserByIds(String ids);
 
     /**
      * 保存用户信息

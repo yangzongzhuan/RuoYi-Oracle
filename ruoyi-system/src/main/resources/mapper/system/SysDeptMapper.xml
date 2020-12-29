@@ -65,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="checkDeptNameUnique" resultMap="SysDeptResult">
 	    <include refid="selectDeptVo"/>
-		where dept_name=#{deptName} and parent_id = #{parentId}
+		where dept_name=#{deptName} and parent_id = #{parentId} and rownum <![CDATA[ <= ]]> 1
 	</select>
 
 	<select id="selectDeptById" parameterType="Long" resultMap="SysDeptResult">
@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="selectChildrenDeptById" parameterType="Long" resultMap="SysDeptResult">
-		select * from sys_dept where FIND_IN_SET (#{deptId},ancestors) <![CDATA[ <> ]]> 0
+		select * from sys_dept where FIND_IN_SET (#{deptId}, ancestors) <![CDATA[ <> ]]> 0
 	</select>
 	
 	<select id="selectNormalChildrenDeptById" parameterType="Long" resultType="int">

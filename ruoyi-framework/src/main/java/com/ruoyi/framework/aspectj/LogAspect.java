@@ -12,16 +12,18 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.BusinessStatus;
 import com.ruoyi.common.json.JSON;
 import com.ruoyi.common.utils.ServletUtils;
+import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
-import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysOperLog;
-import com.ruoyi.system.domain.SysUser;
 
 /**
  * 操作日志记录处理
@@ -33,6 +35,9 @@ import com.ruoyi.system.domain.SysUser;
 public class LogAspect
 {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
+
+    /** 排除敏感属性字段 */
+    public static final String[] EXCLUDE_PROPERTIES = { "password", "oldPassword", "newPassword", "confirmPassword" };
 
     // 配置织入点
     @Pointcut("@annotation(com.ruoyi.common.annotation.Log)")
@@ -84,7 +89,7 @@ public class LogAspect
             String ip = ShiroUtils.getIp();
             operLog.setOperIp(ip);
             // 返回参数
-            operLog.setJsonResult(JSON.marshal(jsonResult));
+            operLog.setJsonResult(StringUtils.substring(JSON.marshal(jsonResult), 0, 2000));
 
             operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
             if (currentUser != null)
@@ -154,8 +159,13 @@ public class LogAspect
     private void setRequestValue(SysOperLog operLog) throws Exception
     {
         Map<String, String[]> map = ServletUtils.getRequest().getParameterMap();
-        String params = JSON.marshal(map);
-        operLog.setOperParam(StringUtils.substring(params, 0, 2000));
+        if (StringUtils.isNotEmpty(map))
+        {
+            PropertyPreFilters.MySimplePropertyPreFilter excludefilter = new PropertyPreFilters().addFilter();
+            excludefilter.addExcludes(EXCLUDE_PROPERTIES);
+            String params = JSONObject.toJSONString(map, excludefilter);
+            operLog.setOperParam(StringUtils.substring(params, 0, 2000));
+        }
     }
 
     /**
