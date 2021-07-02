@@ -22,6 +22,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.system.service.ISysPostService;
@@ -125,11 +126,13 @@ public class SysUserController extends BaseController
         {
             return error("新增用户'" + user.getLoginName() + "'失败，登录账号已存在");
         }
-        else if (UserConstants.USER_PHONE_NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
+        else if (StringUtils.isNotEmpty(user.getPhonenumber())
+                && UserConstants.USER_PHONE_NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
         {
             return error("新增用户'" + user.getLoginName() + "'失败，手机号码已存在");
         }
-        else if (UserConstants.USER_EMAIL_NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
+        else if (StringUtils.isNotEmpty(user.getEmail())
+                && UserConstants.USER_EMAIL_NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
         {
             return error("新增用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
         }
@@ -162,11 +165,13 @@ public class SysUserController extends BaseController
     public AjaxResult editSave(@Validated SysUser user)
     {
         userService.checkUserAllowed(user);
-        if (UserConstants.USER_PHONE_NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
+        if (StringUtils.isNotEmpty(user.getPhonenumber())
+                && UserConstants.USER_PHONE_NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
         {
             return error("修改用户'" + user.getLoginName() + "'失败，手机号码已存在");
         }
-        else if (UserConstants.USER_EMAIL_NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
+        else if (StringUtils.isNotEmpty(user.getEmail())
+                && UserConstants.USER_EMAIL_NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
         {
             return error("修改用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
         }
@@ -219,7 +224,7 @@ public class SysUserController extends BaseController
     /**
      * 用户授权角色
      */
-    @RequiresPermissions("system:user:add")
+    @RequiresPermissions("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
     @PostMapping("/authRole/insertAuthRole")
     @ResponseBody
