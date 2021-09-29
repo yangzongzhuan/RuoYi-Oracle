@@ -151,8 +151,20 @@ public class GenTableServiceImpl implements IGenTableService
     }
 
     /**
+     * 创建表
+     *
+     * @param sql 创建表语句
+     * @return 结果
+     */
+    @Override
+    public int createTable(String sql)
+    {
+        return genTableMapper.createTable(sql);
+    }
+
+    /**
      * 导入表结构
-     * 
+     *
      * @param tableList 导入表列表
      * @param operName 操作人员
      */
@@ -233,7 +245,7 @@ public class GenTableServiceImpl implements IGenTableService
         IOUtils.closeQuietly(zip);
         return outputStream.toByteArray();
     }
-    
+
     /**
      * 生成代码（自定义路径）
      * 
@@ -316,7 +328,7 @@ public class GenTableServiceImpl implements IGenTableService
     }
 
     /**
-     * 批量生成代码
+     * 批量生成代码（下载方式）
      * 
      * @param tableNames 表数组
      * @return 数据
