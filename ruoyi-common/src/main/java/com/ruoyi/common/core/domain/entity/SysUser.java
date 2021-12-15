@@ -12,6 +12,7 @@ import com.ruoyi.common.annotation.Excel.Type;
 import com.ruoyi.common.annotation.Excels;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.xss.Xss;
 
 /**
  * 用户对象 sys_user
@@ -161,6 +162,7 @@ public class SysUser extends BaseEntity
         this.roleId = roleId;
     }
 
+    @Xss(message = "登录账号不能包含脚本字符")
     @NotBlank(message = "登录账号不能为空")
     @Size(min = 0, max = 30, message = "登录账号长度不能超过30个字符")
     public String getLoginName()
@@ -173,6 +175,7 @@ public class SysUser extends BaseEntity
         this.loginName = loginName;
     }
 
+    @Xss(message = "用户昵称不能包含脚本字符")
     @Size(min = 0, max = 30, message = "用户昵称长度不能超过30个字符")
     public String getUserName()
     {
