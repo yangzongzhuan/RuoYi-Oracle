@@ -257,6 +257,9 @@ public class GenTableServiceImpl implements IGenTableService
     {
         // 查询表信息
         GenTable table = genTableMapper.selectGenTableByName(tableName);
+        // 获取菜单id序列，用于生成菜单sql语句
+        long menuId = genTableMapper.selectMenuId();
+        table.setMenuId(menuId);
         // 设置主子表信息
         setSubTable(table);
         // 设置主键列信息
@@ -361,6 +364,9 @@ public class GenTableServiceImpl implements IGenTableService
     {
         // 查询表信息
         GenTable table = genTableMapper.selectGenTableByName(tableName);
+        // 获取菜单id序列，用于生成菜单sql语句
+        long menuId = genTableMapper.selectMenuId();
+        table.setMenuId(menuId);
         // 设置主子表信息
         setSubTable(table);
         // 设置主键列信息
