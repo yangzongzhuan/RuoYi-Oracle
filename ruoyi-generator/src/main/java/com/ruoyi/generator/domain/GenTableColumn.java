@@ -63,7 +63,7 @@ public class GenTableColumn extends BaseEntity
     private String htmlType;
 
     /** 字典类型 */
-    private String dictType;
+    private String dictType = "";
 
     /** 排序 */
     private Integer sort;
@@ -310,14 +310,7 @@ public class GenTableColumn extends BaseEntity
 
     public String getDictType()
     {
-        if (StringUtils.isEmpty(dictType))
-        {
-            return StringUtils.EMPTY;
-        }
-        else
-        {
-            return dictType;
-        }
+        return dictType;
     }
 
     public void setSort(Integer sort)
