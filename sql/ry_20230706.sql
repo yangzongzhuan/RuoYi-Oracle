@@ -1035,7 +1035,7 @@ create sequence seq_gen_table_column
  cache 20;
 create table gen_table_column (
   column_id          number(20)      not null,
-  table_id           varchar2(64),
+  table_id           number(20),
   column_name        varchar2(200),
   column_comment     varchar2(500),
   column_type        varchar2(100),
