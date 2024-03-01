@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
-import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
+import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleCreateTableStatement;
 import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -200,16 +200,16 @@ public class GenController extends BaseController
         try
         {
             SqlUtil.filterKeyword(sql);
-            List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, DbType.mysql);
+            List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, DbType.oracle);
             List<String> tableNames = new ArrayList<>();
             for (SQLStatement sqlStatement : sqlStatements)
             {
-                if (sqlStatement instanceof MySqlCreateTableStatement)
+                if (sqlStatement instanceof OracleCreateTableStatement)
                 {
-                    MySqlCreateTableStatement createTableStatement = (MySqlCreateTableStatement) sqlStatement;
+                    OracleCreateTableStatement createTableStatement = (OracleCreateTableStatement) sqlStatement;
                     if (genTableService.createTable(createTableStatement.toString()))
                     {
-                        String tableName = createTableStatement.getTableName().replaceAll("`", "");
+                        String tableName = createTableStatement.getTableName().replaceAll(";", "");
                         tableNames.add(tableName);
                     }
                 }
