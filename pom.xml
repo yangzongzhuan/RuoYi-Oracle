@@ -29,7 +29,7 @@
         <commons.io.version>2.16.1</commons.io.version>
         <poi.version>4.1.2</poi.version>
         <velocity.version>2.3</velocity.version>
-        <oracle.version>10.2.0.4.0</oracle.version>
+        <oracle.version>12.2.0.1</oracle.version>
         <!-- override dependency version -->
         <tomcat.version>9.0.96</tomcat.version>
         <logback.version>1.2.13</logback.version>
@@ -271,15 +271,6 @@
             <releases>
                 <enabled>true</enabled>
             </releases>
-        </repository>
-        <!-- oracle驱动没有发布到中央仓库，只能从此仓库下载 -->
-        <repository>
-            <id>jeecg</id>
-            <name>jeecg Repository</name>
-            <url>http://maven.jeewx.com/nexus/content/repositories/jeecg</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
     </repositories>
 
