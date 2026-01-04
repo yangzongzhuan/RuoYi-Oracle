@@ -11,7 +11,7 @@ import com.ruoyi.common.annotation.Excel.ColumnType;
 import com.ruoyi.common.annotation.Excel.Type;
 import com.ruoyi.common.annotation.Excels;
 import com.ruoyi.common.core.domain.BaseEntity;
-import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.xss.Xss;
 
 /**
@@ -124,12 +124,7 @@ public class SysUser extends BaseEntity
 
     public boolean isAdmin()
     {
-        return isAdmin(this.userId);
-    }
-
-    public static boolean isAdmin(Long userId)
-    {
-        return userId != null && 1L == userId;
+        return ShiroUtils.isAdmin(this.userId);
     }
 
     public Long getDeptId()
@@ -387,7 +382,7 @@ public class SysUser extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
             .append("dept", getDept())
-            .append("roles", getRoles())
+			.append("roles", getRoles())
             .toString();
     }
 }
