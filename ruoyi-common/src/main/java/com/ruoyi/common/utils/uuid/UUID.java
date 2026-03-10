@@ -66,7 +66,7 @@ public final class UUID implements java.io.Serializable, Comparable<UUID>
     }
 
     /**
-     * 获取类型 4（伪随机生成的）UUID 的静态工厂。
+     * 获取类型 4（伪随机生成的）UUID 的静态工厂。 
      * 
      * @return 随机生成的 {@code UUID}
      */
