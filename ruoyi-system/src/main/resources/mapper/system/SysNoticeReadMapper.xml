@@ -54,13 +54,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
     <!-- 批量标记已读 -->
-    <insert id="insertNoticeReadBatch">
-        insert ignore into sys_notice_read (notice_id, user_id, read_time)
-        values
-        <foreach collection="noticeIds" item="noticeId" separator=",">
-            (#{noticeId}, #{userId}, sysdate())
-        </foreach>
-    </insert>
+	<insert id="insertNoticeReadBatch">
+	    merge into sys_notice_read a
+	    using (
+	        <foreach collection="noticeIds" item="noticeId" separator=" union all ">
+	            select #{noticeId} as notice_id,
+	                   #{userId}   as user_id
+	            from dual
+	        </foreach>
+	    ) b
+	    on (a.notice_id = b.notice_id AND a.user_id = b.user_id)
+	    when not matched then
+	      insert (read_id, notice_id, user_id, read_time)
+	      values (seq_sys_notice_read.nextval, b.notice_id, b.user_id, sysdate)
+	</insert>
 
     <!-- 删除公告时清理已读记录 -->
     <delete id="deleteByNoticeIds">
