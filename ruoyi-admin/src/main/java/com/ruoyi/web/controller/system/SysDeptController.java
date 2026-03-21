@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.UserConstants;
@@ -125,6 +126,19 @@ public class SysDeptController extends BaseController
         }
         dept.setUpdateBy(getLoginName());
         return toAjax(deptService.updateDept(dept));
+    }
+
+    /**
+     * 保存部门排序
+     */
+    @Log(title = "保存部门排序", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("system:dept:edit")
+    @PostMapping("/updateSort")
+    @ResponseBody
+    public AjaxResult updateSort(@RequestParam String[] deptIds, @RequestParam String[] orderNums)
+    {
+        deptService.updateDeptSort(deptIds, orderNums);
+        return success();
     }
 
     /**
