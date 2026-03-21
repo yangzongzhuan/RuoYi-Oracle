@@ -974,7 +974,34 @@ commit;
 
 
 -- ----------------------------
--- 19、代码生成业务表
+-- 19、公告已读记录表
+-- ----------------------------
+create sequence seq_sys_notice_read
+ increment by 1
+ start with 10
+ nomaxvalue
+ nominvalue
+ cache 20;
+
+create table sys_notice_read (
+  read_id           number(20)      not null,
+  notice_id         number(20)      not null,
+  user_id           number(20)      not null,
+  read_time         date            not null
+);
+
+alter table sys_notice_read add constraint pk_sys_notice_read primary key (read_id);
+alter table sys_notice_read add constraint uk_sys_notice_read unique (user_id, notice_id);
+
+comment on table  sys_notice_read                   is '公告已读记录表';
+comment on column sys_notice_read.read_id           is '已读主键seq_sys_notice_read.nextval';
+comment on column sys_notice_read.notice_id         is '公告id';
+comment on column sys_notice_read.user_id           is '用户id';
+comment on column sys_notice_read.read_time         is '阅读时间';
+
+
+-- ----------------------------
+-- 20、代码生成业务表
 -- ----------------------------
 create sequence seq_gen_table
  increment by 1
@@ -1034,7 +1061,7 @@ comment on column gen_table.remark                   is '备注';
 
 
 -- ----------------------------
--- 20、代码生成业务表字段
+-- 21、代码生成业务表字段
 -- ----------------------------
 create sequence seq_gen_table_column
  increment by 1
