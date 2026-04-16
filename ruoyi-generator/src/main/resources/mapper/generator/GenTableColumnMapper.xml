@@ -114,6 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <set>
             column_comment = #{columnComment},
             java_type = #{javaType},
+            column_type = #{columnType},
             java_field = #{javaField},
             is_insert = #{isInsert,jdbcType=CHAR},
             is_edit = #{isEdit,jdbcType=CHAR},
