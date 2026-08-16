@@ -33,13 +33,19 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
-            <classifier>jakarta</classifier>
         </dependency>
-        
-        <!-- Shiro使用EhCache缓存框架 -->
+
+        <!-- Shiro使用JCache缓存框架 -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-ehcache</artifactId>
+            <artifactId>shiro-jcache</artifactId>
+        </dependency>
+
+        <!-- EhCache 3.x 作为JCache实现 -->
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <classifier>jakarta</classifier>
         </dependency>
 
         <!-- pagehelper 分页插件 -->
