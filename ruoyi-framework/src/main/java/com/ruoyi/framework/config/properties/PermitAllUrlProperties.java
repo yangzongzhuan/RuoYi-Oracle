@@ -70,7 +70,6 @@ public class PermitAllUrlProperties implements InitializingBean, ApplicationCont
         this.applicationContext = context;
     }
 
-    @SuppressWarnings("deprecation")
     private List<String> rebuildUrl(String[] bases, String[] uris)
     {
         List<String> urls = new ArrayList<>();
