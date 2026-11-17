@@ -202,7 +202,7 @@ comment on column sys_role.role_id      is '角色主键seq_sys_post.nextval';
 comment on column sys_role.role_name    is '角色名称';
 comment on column sys_role.role_key     is '角色权限字符串';
 comment on column sys_role.role_sort    is '显示顺序';
-comment on column sys_role.data_scope   is '数据范围（1：全部数据权限 2：自定数据权限）';
+comment on column sys_role.data_scope   is '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）';
 comment on column sys_role.status       is '角色状态（0正常 1停用）';
 comment on column sys_role.del_flag     is '删除标志（0代表存在 2代表删除）';
 comment on column sys_role.create_by    is '创建者';
